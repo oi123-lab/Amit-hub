@@ -615,5 +615,4 @@ Tab1:AddButton({"HOUSE BAN KILL", function(Value)
                     end
                 end
             end
-        end
 end})
