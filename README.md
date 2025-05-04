@@ -19,7 +19,7 @@ Window:AddMinimizeButton({
 
 
 
-local Tab1 = Window:MakeTab({"Bem vindo", "WELCOME"})
+local Tab1 = Window:MakeTab({"Bem vindo", "hammer"})
 
 local Paragraph = Tab1:AddParagraph({"Bem Vindo Meu Nobre🎩!", "USE E APROVEITE O HUB COM SABEDORIA🤑🎩!"})
 
