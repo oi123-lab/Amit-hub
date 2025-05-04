@@ -468,8 +468,9 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/oi123-lab/House-ban-k
 end})
 
 
-local Tab1 = Window:MakeTab({"COMBATE SH V4", "SWORD"})
+local Tab1 = Window:MakeTab({"DARK BLADE", "bone"})
 
-Tab1:AddButton({"COMBATE SH V4⚔", function(Value)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/oi123-lab/AJAHHAJSHSHHSHAJSHSHHSJSJS/refs/heads/main/README.md"))()
+
+Tab1:AddButton({"DARK BLADE", function(Value)
+loadstring(game:HttpGet('https://pastebin.com/raw/6ctYevGX'))()
 end})
