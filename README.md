@@ -3,7 +3,7 @@ local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao1
 local Window = redzlib:MakeWindow({
     Title = "Amir Hub",
     SubTitle = "by Amir goat",
-    SaveFolder = "phantomhub_v1.lua"
+    SaveFolder = "AmirHubConfigs"
 })
 
 Window:AddMinimizeButton({
