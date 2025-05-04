@@ -479,7 +479,7 @@ local Dropdown = Tab1:AddDropdown({
 
 
 
-Tab1:AddButton({"Jogar Player pro espaço", function()
+Tab1:AddButton({"Jogar Player pro espaço", function(selected)
         if selectedPlayerName then
             local selectedPlayer = game.Players:FindFirstChild(selectedPlayerName)
             if selectedPlayer then
