@@ -3,13 +3,21 @@ local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao1
 local Window = redzlib:MakeWindow({
     Title = "Matrix hub v4.2",
     SubTitle = "by Matrix Community",
-    SaveFolder = "AmirHubConfigs"
+    SaveFolder = "MatrixHubConfigs"
 })
 
 Window:AddMinimizeButton({
     Button = { Image = "rbxassetid://85219327131493", BackgroundTransparency = 0 },
     Corner = { CornerRadius = UDim.new(35, 1) },
 })
+
+-- ID do som a ser reproduzido quando o código for executado local soundId = "rbxassetid://1836973601"
+
+-- Função para tocar o som local function playSound() local sound = Instance.new("Sound") sound.SoundId = soundId sound.Parent = game.Workspace -- Coloque no Workspace para garantir que seja ouvido sound:Play() end
+
+-- Tocar o som assim que o script for executado playSound()
+
+
 
 local Tab1 = Window:MakeTab({"Bem vindo", "Vindo"})
 
