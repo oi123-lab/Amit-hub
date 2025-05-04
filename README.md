@@ -19,7 +19,7 @@ Window:AddMinimizeButton({
 
 
 
-local Tab1 = Window:MakeTab({"Bem vindo", "Vindo"})
+local Tab1 = Window:MakeTab({"Bem vindo", "HOUSE"})
 
 local Paragraph = Tab1:AddParagraph({"Bem Vindo Meu Nobre🎩!", "USE E APROVEITE O HUB COM SABEDORIA🤑🎩!"})
 
@@ -29,7 +29,7 @@ local Paragraph = Tab1:AddParagraph({"CRÉDITOS", "OWNER: MINI PUMPKIN|DEVS: NOT
 
 
 
-local Tab1 = Window:MakeTab({"Fling Couch", "v17"})
+local Tab1 = Window:MakeTab({"Fling Couch", "COUCH"})
 
 local Section = Tab1:AddSection({"Fling op"})
 
@@ -288,7 +288,7 @@ game:GetService("ReplicatedStorage").RE:FindFirstChild("1Too1l"):InvokeServer(un
 end})
 
 
-local Tab1 = Window:MakeTab({"BOOMBOX FE", "FE"})
+local Tab1 = Window:MakeTab({"BOOMBOX FE", "RADIO"})
 
 Tab1:AddButton({"BOOMBOX 100% FE", function(Value)
         local player = game.Players.LocalPlayer
@@ -460,7 +460,7 @@ Tab1:AddButton({"BOOMBOX 100% FE", function(Value)
 end})
 
 
-local Tab1 = Window:MakeTab({"HOUSE BAN KILL", ""})
+local Tab1 = Window:MakeTab({"HOUSE BAN KILL", "SKULL"})
 
 
 Tab1:AddButton({"HOUSE BAN KILL", function(Value)
