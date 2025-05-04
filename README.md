@@ -2,7 +2,7 @@ local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao1
 
 local Window = redzlib:MakeWindow({
     Title = "Matrix hub v4.2 : BROOKHAVEN🏡",
-    SubTitle = "by Matrix Community",
+    SubTitle = "By Matrix Community Rework",
     SaveFolder = "MatrixHubConfigs"
 })
 
@@ -21,51 +21,12 @@ Window:AddMinimizeButton({
 
 local Tab1 = Window:MakeTab({"Bem vindo", "Vindo"})
 
+local Paragraph = Tab1:AddParagraph({"Bem Vindo Meu Nobre🎩!", "USE E APROVEITE O HUB COM SABEDORIA🤑🎩!"})
+
+local Paragraph = Tab1:AddParagraph({"ATUALIZAÇÕES", "A TAB DE BEM VINDO REWORK!,BOOMBOX ADICIONADA,MELHOR FLING COUCH DO BROOKHAVEN ADICIONADO, HOUSE BAN KILL ADICIONADO, COMBATE SH V4 ADICIONADO,NOVA UI"})
+
 local Paragraph = Tab1:AddParagraph({"CRÉDITOS", "OWNER: MINI PUMPKIN|DEVS: NOT LEGITTY, SOY EL TORRADA,SH|MEMBERS: ANGOLA DA SHOPY, CALEBITO39"})
 
--- Script para Redzlibv5 - Mensagens de Entrada/Saída do Servidor
--- Versão: 1.0
--- Autor: [NOT LEGITTY]
-
-RegisterNetEvent('playerConnecting')
-RegisterNetEvent('playerDropped')
-
--- Configuração
-local config = {
-    mensagemEntrada = "🟢 ^2{player} ^7entrou no servidor. Bem-vindo(a)!",
-    mensagemSaida = "🔴 ^1{player} ^7saiu do servidor. Até mais!",
-    tempoExibicao = 5000, -- 5 segundos em milissegundos
-    cor = { r = 255, g = 255, b = 255, a = 255 } -- Cor branca
-}
-
--- Função para substituir placeholders
-local function substituirPlaceholders(mensagem, player)
-    local nome = GetPlayerName(player) or "Desconhecido"
-    return mensagem:gsub("{player}", nome)
-end
-
--- Evento quando um jogador está se conectando
-AddEventHandler('playerConnecting', function(name, setReason, deferrals)
-    local mensagem = substituirPlaceholders(config.mensagemEntrada, source)
-    TriggerClientEvent('chat:addMessage', -1, {
-        color = config.cor,
-        multiline = true,
-        args = {"Sistema", mensagem}
-    })
-end)
-
--- Evento quando um jogador sai do servidor
-AddEventHandler('playerDropped', function(reason)
-    local mensagem = substituirPlaceholders(config.mensagemSaida, source)
-    TriggerClientEvent('chat:addMessage', -1, {
-        color = config.cor,
-        multiline = true,
-        args = {"Sistema", mensagem}
-    })
-end)
-
--- Mensagem de inicialização
-print("[Redzlibv5] Sistema de notificações de entrada/saída carregado com sucesso!")
 
 
 local Tab1 = Window:MakeTab({"Fling Couch", "v17"})
@@ -507,5 +468,8 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/oi123-lab/House-ban-k
 end})
 
 
+local Tab1 = Window:MakeTab({"COMBATE SH V4", "SWORD"})
 
-
+Tab1:AddButton({"Print", function(Value)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/oi123-lab/AJAHHAJSHSHHSHAJSHSHHSJSJS/refs/heads/main/README.md"))()
+end})
