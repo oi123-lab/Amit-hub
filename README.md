@@ -11,93 +11,252 @@ Window:AddMinimizeButton({
     Corner = { CornerRadius = UDim.new(35, 1) },
 })
 
--- Abas principais
-local TrollTab = Window:MakeTab({"Troll", "trollicon"})
-local ESPTab = Window:MakeTab({"ESP", "espicon"})
-local ConfigTab = Window:MakeTab({"Configurações", "configicon"})
+local Tab1 = Window:MakeTab({"Bem", "Vindo"})
 
-Window:SelectTab(TrollTab)
+local Paragraph = Tab1:AddParagraph({"CRÉDITOS", "OWNER: MINI PUMPKIN|DEVS: NOT LEGITTY, SOY EL TORRADA,SH|MEMBERS: ANGOLA DA SHOPY, CALEBITO39"})
 
-------------------------------------------------------
--- ABA: TROLL
-------------------------------------------------------
-local playerList = {}
-for _, plr in pairs(game.Players:GetPlayers()) do
-    if plr ~= game.Players.LocalPlayer then
-        table.insert(playerList, plr.Name)
-    end
+
+local Targets = {""} -- Nome será preenchido pela TextBox
+local LoopAtivo = false
+
+-- TextBox para capturar o nome do jogador e armazenar em Targets[1]
+Tab1:AddTextBox({
+  Name = "Name item",
+  Description = "1 Item on 1 Server", 
+  PlaceholderText = "item only",
+  Callback = function(Value)
+Targets[1] = Value    
+  end
+})
+
+local Tab1 = Window:MakeTab({"Fling", "v17"})
+
+local Toggle1 = Tab1:AddToggle({
+  Name = "Fling",
+  Description = "This is a <font color='rgb(88, 101, 242)'>Toggle</font> Example",
+  Default = false 
+})
+Toggle1:Callback(function(Value)
+ 		if Value then
+            -- Ativa o loop quando a toggle é ligada
+            LoopAtivo = true
+            task.spawn(function()
+                while LoopAtivo do
+                    local player = game.Players.LocalPlayer
+ local mouse = player:GetMouse()
+ local Targets = {Targets[1]}
+ 
+ local Players = game:GetService("Players")
+ local Player = Players.LocalPlayer
+ 
+ local AllBool = false
+ 
+ local GetPlayer = function(Name)
+	Name = Name:lower()
+	if Name == "all" or Name == "others" then
+		AllBool = true
+		return
+	elseif Name == "random" then
+		local GetPlayers = Players:GetPlayers()
+		if table.find(GetPlayers,Player) then table.remove(GetPlayers,table.find(GetPlayers,Player)) end
+		return GetPlayers[math.random(#GetPlayers)]
+	elseif Name ~= "random" and Name ~= "all" and Name ~= "others" then
+		for _,x in next, Players:GetPlayers() do
+			if x ~= Player then
+				if x.Name:lower():match("^"..Name) then
+					return x;
+				elseif x.DisplayName:lower():match("^"..Name) then
+					return x;
+				end
+			end
+		end
+	else
+		return
+	end
+ end
+ 
+ local Message = function(_Title, _Text, Time)
+	print(_Title)
+	print(_Text)
+	print(Time)
 end
 
-local selectedPlayer
-
-TrollTab:AddDropdown({
-    Name = "Escolher Jogador",
-    Options = playerList,
-    Callback = function(v)
-        selectedPlayer = v
-    end
-})
-
-TrollTab:AddButton({
-    Name = "Fling",
-    Callback = function()
-        local target = game.Players:FindFirstChild(selectedPlayer)
-        if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
-            local myHRP = game.Players.LocalPlayer.Character.HumanoidRootPart
-            local targetHRP = target.Character:FindFirstChild("HumanoidRootPart")
-            myHRP.CFrame = targetHRP.CFrame
-            wait(0.2)
-            myHRP.Velocity = Vector3.new(9999, 9999, 9999)
-        end
-    end
-})
-
-TrollTab:AddButton({
-    Name = "Kill (Break Joints)",
-    Callback = function()
-        local target = game.Players:FindFirstChild(selectedPlayer)
-        if target and target.Character then
-            target.Character:BreakJoints()
-        end
-    end
-})
-
-------------------------------------------------------
--- ABA: ESP
-------------------------------------------------------
-ESPTab:AddButton({
-    Name = "Ativar ESP",
-    Callback = function()
-        for _, plr in pairs(game.Players:GetPlayers()) do
-            if plr ~= game.Players.LocalPlayer and plr.Character and plr.Character:FindFirstChild("Head") then
-                local esp = Instance.new("BoxHandleAdornment", plr.Character.Head)
-                esp.Size = Vector3.new(2, 2, 1)
-                esp.Color3 = Color3.fromRGB(255, 0, 0)
-                esp.Transparency = 0.5
-                esp.AlwaysOnTop = true
-                esp.Adornee = plr.Character.Head
-            end
-        end
-    end
-})
-
-------------------------------------------------------
--- ABA: CONFIGURAÇÕES
-------------------------------------------------------
-ConfigTab:AddToggle({
-    Name = "Modo Noturno",
-    Callback = function(v)
-        if v then
-            game.Lighting.Brightness = 0
+local SkidFling = function(TargetPlayer)
+	local Character = Player.Character
+	local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
+	local RootPart = Humanoid and Humanoid.RootPart
+ 
+	local TCharacter = TargetPlayer.Character
+	local THumanoid
+	local TRootPart
+	local THead
+	local Accessory
+	local Handle
+ 
+	if TCharacter:FindFirstChildOfClass("Humanoid") then
+		THumanoid = TCharacter:FindFirstChildOfClass("Humanoid")
+	end
+	if THumanoid and THumanoid.RootPart then
+		TRootPart = THumanoid.RootPart
+	end
+	if TCharacter:FindFirstChild("Head") then
+		THead = TCharacter.Head
+	end
+	if TCharacter:FindFirstChildOfClass("Accessory") then
+		Accessory = TCharacter:FindFirstChildOfClass("Accessory")
+	end
+	if Accessoy and Accessory:FindFirstChild("Handle") then
+		Handle = Accessory.Handle
+	end
+ 
+	if Character and Humanoid and RootPart then
+		if RootPart.Velocity.Magnitude < 50 then
+			getgenv().OldPos = RootPart.CFrame
+		end
+		if THumanoid and THumanoid.Sit and not AllBool then
+		end
+		if THead then
+			workspace.CurrentCamera.CameraSubject = THead
+		elseif not THead and Handle then
+			workspace.CurrentCamera.CameraSubject = Handle
+		elseif THumanoid and TRootPart then
+			workspace.CurrentCamera.CameraSubject = THumanoid
+		end
+		if not TCharacter:FindFirstChildWhichIsA("BasePart") then
+			return
+		end
+		
+		local FPos = function(BasePart, Pos, Ang)
+			RootPart.CFrame = CFrame.new(BasePart.Position) * Pos * Ang
+			Character:SetPrimaryPartCFrame(CFrame.new(BasePart.Position) * Pos * Ang)
+			RootPart.Velocity = Vector3.new(9e7, 9e7 * 10, 9e7)
+			RootPart.RotVelocity = Vector3.new(9e8, 9e8, 9e8)
+		end
+		
+		local SFBasePart = function(BasePart)
+			local TimeToWait = 2
+			local Time = tick()
+			local Angle = 0
+ 
+			repeat
+				if RootPart and THumanoid then
+					if BasePart.Velocity.Magnitude < 50 then
+						Angle = Angle + 100
+ 
+						FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle),0 ,0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(2.25, 1.5, -2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(-2.25, -1.5, 2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+					else
+						FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, -THumanoid.WalkSpeed), CFrame.Angles(0, 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+						task.wait()
+						
+						FPos(BasePart, CFrame.new(0, 1.5, TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(math.rad(90), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, -TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(0, 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, 1.5, TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(math.rad(90), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(math.rad(90), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(0, 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5 ,0), CFrame.Angles(math.rad(-90), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(0, 0, 0))
+						task.wait()
+					end
+				else
+					break
+				end
+			until BasePart.Velocity.Magnitude > 500 or BasePart.Parent ~= TargetPlayer.Character or TargetPlayer.Parent ~= Players or not TargetPlayer.Character == TCharacter or THumanoid.Sit or Humanoid.Health <= 0 or tick() > Time + TimeToWait
+		end
+		
+		workspace.FallenPartsDestroyHeight = 0/0
+		
+		local BV = Instance.new("BodyVelocity")
+		BV.Name = "EpixVel"
+		BV.Parent = RootPart
+		BV.Velocity = Vector3.new(9e8, 9e8, 9e8)
+		BV.MaxForce = Vector3.new(1/0, 1/0, 1/0)
+		
+		Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+		
+		if TRootPart and THead then
+			if (TRootPart.CFrame.p - THead.CFrame.p).Magnitude > 5 then
+				SFBasePart(THead)
+			else
+				SFBasePart(TRootPart)
+			end
+		elseif TRootPart and not THead then
+			SFBasePart(TRootPart)
+		elseif not TRootPart and THead then
+			SFBasePart(THead)
+		elseif not TRootPart and not THead and Accessory and Handle then
+			SFBasePart(Handle)
+		else
+		end
+		
+		BV:Destroy()
+		Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
+		workspace.CurrentCamera.CameraSubject = Humanoid
+	
+		workspace.FallenPartsDestroyHeight = getgenv().FPDH
+	else
+	end
+ end
+ 
+ getgenv().Welcome = true
+ if Targets[1] then for _,x in next, Targets do GetPlayer(x) end else return end
+ 
+ if AllBool then
+	for _,x in next, Players:GetPlayers() do
+		SkidFling(x)
+	end
+ end
+ 
+ for _,x in next, Targets do
+	if GetPlayer(x) and GetPlayer(x) ~= Player then
+		if GetPlayer(x).UserId ~= 1414978355 then
+			local TPlayer = GetPlayer(x)
+			if TPlayer then
+				SkidFling(TPlayer)
+			end
+		else
+		end
+	elseif not GetPlayer(x) and not AllBool then
+	end
+ end
+                    task.wait(0.1)
+                end
+            end)
         else
-            game.Lighting.Brightness = 2
+            -- Desativa o loop quando a toggle é desligada
+            LoopAtivo = false
         end
-    end
-})
-
-ConfigTab:AddButton({
-    Name = "Reiniciar Personagem",
-    Callback = function()
-        game.Players.LocalPlayer.Character:BreakJoints()
-    end
-})
+end)
