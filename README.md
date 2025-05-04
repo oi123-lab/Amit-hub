@@ -23,7 +23,7 @@ local Tab1 = Window:MakeTab({"Bem vindo", "Vindo"})
 
 local Paragraph = Tab1:AddParagraph({"Bem Vindo Meu Nobre🎩!", "USE E APROVEITE O HUB COM SABEDORIA🤑🎩!"})
 
-local Paragraph = Tab1:AddParagraph({"ATUALIZAÇÕES", "A TAB DE BEM VINDO REWORK!,BOOMBOX ADICIONADA,MELHOR FLING COUCH DO BROOKHAVEN ADICIONADO, HOUSE BAN KILL ADICIONADO, COMBATE SH V4 ADICIONADO,NOVA UI"})
+local Paragraph = Tab1:AddParagraph({"ATUALIZAÇÕES📜🛠", "⚒A TAB DE BEM VINDO REWORK!,BOOMBOX ADICIONADA,MELHOR FLING COUCH DO BROOKHAVEN ADICIONADO, HOUSE BAN KILL ADICIONADO, COMBATE SH V4 ADICIONADO,NOVA UI⚔"})
 
 local Paragraph = Tab1:AddParagraph({"CRÉDITOS", "OWNER: MINI PUMPKIN|DEVS: NOT LEGITTY, SOY EL TORRADA,SH|MEMBERS: ANGOLA DA SHOPY, CALEBITO39"})
 
@@ -470,6 +470,6 @@ end})
 
 local Tab1 = Window:MakeTab({"COMBATE SH V4", "SWORD"})
 
-Tab1:AddButton({"Print", function(Value)
+Tab1:AddButton({"COMBATE SH V4⚔", function(Value)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/oi123-lab/AJAHHAJSHSHHSHAJSHSHHSJSJS/refs/heads/main/README.md"))()
 end})
