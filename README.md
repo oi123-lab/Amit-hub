@@ -452,9 +452,3 @@ local Tab1 = Window:MakeTab({"HOUSE BAN KILL", ""})
 Tab1:AddButton({"HOUSE BAN KILL", function(Value)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/oi123-lab/House-ban-kill/refs/heads/main/README.md"))()
 end})
-
-
-
-local Tab1 = Window:MakeTab({"COMBATE SH V4", ""})
-
-
