@@ -432,5 +432,5 @@ Tab1:AddButton({"Print", function(Value)
         end
 
         -- Chama a função para criar a Boombox
-        createBoombox( )("Hello World!")
+        createBoombox()
 end})
