@@ -11,7 +11,7 @@ Window:AddMinimizeButton({
     Corner = { CornerRadius = UDim.new(35, 1) },
 })
 
-local Tab1 = Window:MakeTab({"Bem", "Vindo"})
+local Tab1 = Window:MakeTab({"Bem vindo", "Vindo"})
 
 local Paragraph = Tab1:AddParagraph({"CRÉDITOS", "OWNER: MINI PUMPKIN|DEVS: NOT LEGITTY, SOY EL TORRADA,SH|MEMBERS: ANGOLA DA SHOPY, CALEBITO39"})
 
@@ -451,4 +451,106 @@ local Tab1 = Window:MakeTab({"HOUSE BAN KILL", ""})
 
 Tab1:AddButton({"HOUSE BAN KILL", function(Value)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/oi123-lab/House-ban-kill/refs/heads/main/README.md"))()
+end})
+
+
+
+local Tab1 = Window:MakeTab({"COMBATE SH V4", ""})
+
+
+    local Players = game:GetService("Players")
+local playerNames = {}
+for _, player in pairs(Players:GetPlayers()) do
+    table.insert(playerNames, player.Name)
+end
+
+local selectedPlayerName = nil
+
+local Dropdown = Tab1:AddDropdown({
+  Name = "Selecionar Jogador",
+  Description = "Select the <font color='rgb(88, 101, 242)'>Number</font>",
+  Options = {"playerNames", "", ""},
+  Default = "two",
+  Flag = "dropdown teste",
+  Callback = function(selected)
+         selectedPlayerName = selected
+  end
+})
+
+
+
+Tab1:AddButton({"Jogar Player pro espaço", function()
+        if selectedPlayerName then
+            local selectedPlayer = game.Players:FindFirstChild(selectedPlayerName)
+            if selectedPlayer then
+                local Player = game.Players.LocalPlayer
+                local Character = Player.Character
+                local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
+                local RootPart = Character and Character:FindFirstChild("HumanoidRootPart")
+                local Vehicles = game.Workspace:FindFirstChild("Vehicles")
+                local OldPos = RootPart and RootPart.CFrame
+
+                if RootPart and Vehicles then
+                    local PCar = Vehicles:FindFirstChild(Player.Name.."Car")
+                    if not PCar then
+                        RootPart.CFrame = CFrame.new(-3, -4, 2105)
+                        task.wait(0.5)
+                        game:GetService("ReplicatedStorage").RE["1Ca1r"]:FireServer("PickingBoat", "MilitaryBoatFree")
+                        task.wait(0.5)
+                        PCar = Vehicles:FindFirstChild(Player.Name.."Car")
+
+                        if PCar then
+                            local Seat = PCar:FindFirstChild("Body") and PCar.Body:FindFirstChild("VehicleSeat")
+                            if Seat then
+                                repeat
+                                    task.wait()
+                                    RootPart.CFrame = Seat.CFrame * CFrame.new(0, 2, 0)
+                                until Humanoid and Humanoid.Sit
+                            end
+                        end
+                    end
+
+                    local TargetC = selectedPlayer.Character
+                    local TargetH = TargetC and TargetC:FindFirstChildOfClass("Humanoid")
+                    local TargetRP = TargetC and TargetC:FindFirstChild("HumanoidRootPart")
+
+                    if PCar and TargetC and TargetH and TargetRP then
+                        if not TargetH.Sit then
+                            while not TargetH.Sit do
+                                task.wait()
+                                PCar:SetPrimaryPartCFrame(TargetRP.CFrame * CFrame.new(0, -2, 0))
+                            end
+                            task.wait(0.1)
+
+                            local AngularVelocity = Instance.new("BodyAngularVelocity")
+                            AngularVelocity.AngularVelocity = Vector3.new(99, 99, 99)
+                            AngularVelocity.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
+                            AngularVelocity.Parent = PCar.PrimaryPart
+
+                            task.wait(1)
+
+                            local launchDirection = Vector3.new(math.random(-1, 1), 1, math.random(-1, 1)).unit * 50
+                            local BodyVelocity = Instance.new("BodyVelocity")
+                            BodyVelocity.Velocity = launchDirection
+                            BodyVelocity.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+                            BodyVelocity.Parent = PCar.PrimaryPart
+
+                            task.wait(0.5)
+                            BodyVelocity:Destroy()
+                            AngularVelocity:Destroy()
+
+                            if Humanoid then Humanoid.Sit = false end
+                            task.wait(0.1)
+                            if RootPart then RootPart.CFrame = OldPos end
+                        end
+                    end
+                end
+            else
+                print("tu tento pega um jogador que kitou ou que ta bugado")
+            end
+        else
+            print("seleciona um jogador filho da puta animal")
+        end
+    end
+})
 end})
