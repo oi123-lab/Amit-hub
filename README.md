@@ -19,7 +19,7 @@ Window:AddMinimizeButton({
 
 
 
-local Tab1 = Window:MakeTab({"Bem vindo", "HOUSE"})
+local Tab1 = Window:MakeTab({"Bem vindo", "WELCOME"})
 
 local Paragraph = Tab1:AddParagraph({"Bem Vindo Meu Nobre🎩!", "USE E APROVEITE O HUB COM SABEDORIA🤑🎩!"})
 
@@ -29,7 +29,7 @@ local Paragraph = Tab1:AddParagraph({"CRÉDITOS", "OWNER: MINI PUMPKIN|DEVS: NOT
 
 
 
-local Tab1 = Window:MakeTab({"Fling Couch", "COUCH"})
+local Tab1 = Window:MakeTab({"Fling Couch", "shield"})
 
 local Section = Tab1:AddSection({"Fling op"})
 
