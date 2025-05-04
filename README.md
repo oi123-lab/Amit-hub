@@ -1,8 +1,8 @@
 local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/Library-ui/refs/heads/main/Redzhubui"))()
 
 local Window = redzlib:MakeWindow({
-    Title = "Amir Hub",
-    SubTitle = "by Amir goat",
+    Title = "Matrix hub v4.2",
+    SubTitle = "by Matrix Community",
     SaveFolder = "AmirHubConfigs"
 })
 
