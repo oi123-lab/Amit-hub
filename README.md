@@ -7,7 +7,7 @@ local Window = redzlib:MakeWindow({
 })
 
 Window:AddMinimizeButton({
-    Button = { Image = "rbxassetid://71014873973869", BackgroundTransparency = 0 },
+    Button = { Image = "rbxassetid://85219327131493", BackgroundTransparency = 0 },
     Corner = { CornerRadius = UDim.new(35, 1) },
 })
 
@@ -15,21 +15,23 @@ local Tab1 = Window:MakeTab({"Bem", "Vindo"})
 
 local Paragraph = Tab1:AddParagraph({"CRÉDITOS", "OWNER: MINI PUMPKIN|DEVS: NOT LEGITTY, SOY EL TORRADA,SH|MEMBERS: ANGOLA DA SHOPY, CALEBITO39"})
 
+local Tab1 = Window:MakeTab({"Fling", "v17"})
+
+local Section = Tab1:AddSection({"Fling op"})
 
 local Targets = {""} -- Nome será preenchido pela TextBox
 local LoopAtivo = false
 
 -- TextBox para capturar o nome do jogador e armazenar em Targets[1]
 Tab1:AddTextBox({
-  Name = "Name item",
-  Description = "1 Item on 1 Server", 
+  Name = "Player",
+  Description = "", 
   PlaceholderText = "item only",
   Callback = function(Value)
 Targets[1] = Value    
   end
 })
 
-local Tab1 = Window:MakeTab({"Fling", "v17"})
 
 local Toggle1 = Tab1:AddToggle({
   Name = "Fling",
@@ -260,3 +262,176 @@ local SkidFling = function(TargetPlayer)
             LoopAtivo = false
         end
 end)
+
+
+local Tab1 = Window:MakeTab({"BOOMBOX", "FE"})
+
+Tab1:AddButton({"Print", function(Value)
+        local player = game.Players.LocalPlayer
+        local playerGui = player:FindFirstChild("PlayerGui")
+        if not playerGui then return end -- Verifica se o jogador tem PlayerGui
+
+        local boombox
+        local sg
+        local savedID = nil  -- Variável para armazenar o ID salvo
+        local listFrame = {}  -- Tabela para controlar múltiplos frames da boombox
+
+        -- Função para criar a Boombox
+        local function createBoombox()
+            boombox = Instance.new("Tool")
+            boombox.Name = "Boombox"
+            boombox.RequiresHandle = true
+            boombox.Parent = player.Backpack
+
+            local handle = Instance.new("Part")
+            handle.Name = "Handle"
+            handle.Size = Vector3.new(1, 1, 1)
+            handle.CanCollide = false
+            handle.Anchored = false
+            handle.Transparency = 1
+            handle.Parent = boombox
+
+            -- Função para criar a GUI de música
+            local function createGui()
+                -- Verifica se já existe um frame da boombox
+                if listFrame[player.UserId] then
+                    return  -- Interrompe a criação da GUI se já existir
+                end
+
+                -- Marca que a GUI foi criada para esse jogador
+                listFrame[player.UserId] = true
+
+                sg = Instance.new("ScreenGui")
+                sg.Name = "ChooseSongGui"
+                sg.Parent = playerGui  
+
+                local frame = Instance.new("Frame")
+                frame.Style = "RobloxRound"
+                frame.Size = UDim2.new(0.25, 0, 0.25, 0)
+                frame.Position = UDim2.new((1-frame.Size.X.Scale)/2, 0, (1-frame.Size.Y.Scale)/2, 0)
+                frame.Parent = sg
+                frame.Draggable = true
+
+                local text = Instance.new("TextLabel")
+                text.BackgroundTransparency = 1
+                text.TextStrokeTransparency = 0
+                text.TextColor3 = Color3.new(1, 1, 1)
+                text.Size = UDim2.new(1, 0, 0.6, 0)
+                text.TextScaled = true
+                text.Text = "Lay down the beat!\nPut in the ID number for a song you love that's been uploaded to ROBLOX.\nLeave it blank to stop playing music."
+                text.Parent = frame
+
+                local input = Instance.new("TextBox")
+                input.BackgroundColor3 = Color3.new(0, 0, 0)
+                input.BackgroundTransparency = 0.5
+                input.BorderColor3 = Color3.new(1, 1, 1)
+                input.TextColor3 = Color3.new(1, 1, 1)
+                input.TextStrokeTransparency = 1
+                input.TextScaled = true
+                input.Text = savedID or "142376088"  -- Usar o ID salvo ou o padrão
+                input.Size = UDim2.new(1, 0, 0.2, 0)
+                input.Position = UDim2.new(0, 0, 0.6, 0)
+                input.Parent = frame
+
+                local button = Instance.new("TextButton")
+                button.Style = "RobloxButton"
+                button.Size = UDim2.new(0.75, 0, 0.2, 0)
+                button.Position = UDim2.new(0.125, 0, 0.8, 0)
+                button.TextColor3 = Color3.new(1, 1, 1)
+                button.TextStrokeTransparency = 0
+                button.Text = "Play!"
+                button.TextScaled = true
+                button.Parent = frame
+
+                -- Função para tocar a música no servidor
+                local function playAudioAll(ID)
+                    if type(ID) ~= "number" then
+                        print("Insira um número válido!")
+                        return
+                    end
+
+                    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                    local GunSoundEvent = ReplicatedStorage:FindFirstChild("1Gu1nSound1s", true)
+                    if GunSoundEvent then
+                        GunSoundEvent:FireServer(workspace, ID, 1)
+                    end
+                end
+
+                -- Função para tocar a música localmente
+                local function playAudioLocal(ID)
+                    local sound = Instance.new("Sound")
+                    sound.SoundId = "rbxassetid://" .. ID
+                    sound.Volume = 1
+                    sound.Looped = false
+                    sound.Parent = player.Character or workspace
+                    sound:Play()
+                    task.wait(3)
+                    sound:Destroy()
+                end
+
+                -- Função do botão "Play!"
+                button.MouseButton1Click:Connect(function()
+                    local soundID = tonumber(input.Text)
+                    if soundID then
+                        savedID = soundID  -- Salva o ID que foi inserido
+                        playAudioAll(soundID) -- Toca para o servidor
+                        playAudioLocal(soundID) -- Toca para você também
+                    else
+                        print("ID inválido!")
+                    end
+
+                    -- Remove a GUI instantaneamente
+                    if sg then
+                        sg:Destroy()
+                        listFrame[player.UserId] = nil  -- Libera a GUI para futuras interações
+                    end
+                end)
+
+            end
+
+            -- Evento ao equipar a Boombox
+            boombox.Equipped:Connect(function()
+                -- Cria a GUI quando a Boombox é equipada, se ainda não existir
+                if not listFrame[player.UserId] then
+                    createGui()
+                end
+
+                -- Comando para equipar visualmente o Boombox no avatar
+                local args = {
+                    [1] = 1018548665  -- ID original
+                }
+                game:GetService("ReplicatedStorage").Remotes.Wear:InvokeServer(unpack(args))
+            end)
+
+            -- Evento ao desequipar a Boombox
+            boombox.Unequipped:Connect(function()
+                -- Remove a GUI quando o item for desequipado
+                if sg then
+                    sg:Destroy()
+                    sg = nil
+                end
+
+                -- Comando para remover a Boombox visual do avatar
+                local args = {
+                    [1] = 1018548665  -- ID original
+                }
+                game:GetService("ReplicatedStorage").Remotes.Wear:InvokeServer(unpack(args))
+
+                -- Libera a GUI para a criação de um novo frame caso o item seja re-equipado
+                listFrame[player.UserId] = nil
+            end)
+
+            -- Evento para detectar se a Boombox foi deletada da mochila
+            boombox.AncestryChanged:Connect(function(_, parent)
+                if not parent and sg then
+                    sg:Destroy()
+                    sg = nil
+                    listFrame[player.UserId] = nil  -- Permite criar a GUI novamente quando o item for removido
+                end
+            end)
+        end
+
+        -- Chama a função para criar a Boombox
+        createBoombox()
+    end("Hello World!")
+end})
