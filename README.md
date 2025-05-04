@@ -448,28 +448,6 @@ end})
 
 local Tab1 = Window:MakeTab({"HOUSE BAN KILL", ""})
 
-local Section = Tab1:AddSection({"HOUSE BAN KILL"})
-
-local selectedPlayer
-
-local function ShowPlayerList()
-    local playerNames = {}
-    for _, player in pairs(game.Players:GetPlayers()) do
-        table.insert(playerNames, player.Name)
-    end
-
-    local Dropdown = Tab1:AddDropdown({
-  Name = "Players List",
-  Description = "Select the <font color='rgb(88, 101, 242)'>Number</font>",
-  Options = {"one", "two", "three"},
-  Default = "two",
-  Flag = "dropdown teste",
-  Callback = function(Value)
-            selectedPlayer = game.Players:FindFirstChild(Value)
-            print("Jogador selecionado: " .. Value)    
-  end
-})
-
 
 Tab1:AddButton({"HOUSE BAN KILL", function(Value)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/oi123-lab/House-ban-kill/refs/heads/main/README.md"))()
