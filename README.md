@@ -1,8 +1,8 @@
-local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/Library-ui/refs/heads/main/Redzhubui"))()
+local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kiwilegazin/Redz-lib-v5/refs/heads/main/README.md"))()
 
 local Window = redzlib:MakeWindow({
-    Title = "Matrix hub v4.2 : BROOKHAVEN🏡",
-    SubTitle = "By Matrix Community Rework",
+    Title = "Matrix hub v4.2 : BROOKHAVEN🏡 ",
+    SubTitle = "By Matrix Community Rework v2",
     SaveFolder = "MatrixHubConfigs"
 })
 
