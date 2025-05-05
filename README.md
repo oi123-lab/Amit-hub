@@ -483,7 +483,12 @@ Tab1:AddTextBox({
 
 
 Tab1:AddButton({"HOUSE BAN KILL", function(Value)
-        local Player = game.Players.LocalPlayer
+local player = game.Players.LocalPlayer
+ local mouse = player:GetMouse()
+ local Targets = {Targets[1]}
+ 
+ local Players = game:GetService("Players")
+ local Player = Players.LocalPlayer
     local Backpack = Player.Backpack
     local Character = Player.Character
     local Humanoid = Character:FindFirstChildOfClass("Humanoid")
