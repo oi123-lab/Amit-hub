@@ -1,4 +1,4 @@
-local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/Library-ui/refs/heads/main/Redzhubui"))()
+local redzlib = loadstring(game:HttpGet("https://pastebin.com/raw/DTB6QZfY"))()
 
 local Window = redzlib:MakeWindow({
     Title = "Matrix hub v4.2 : BROOKHAVEN🏡 ",
