@@ -1,0 +1,312 @@
+local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/Library-ui/refs/heads/main/Redzhubui"))()
+local Window = redzlib:MakeWindow({
+  Title = "MATRIX HUB FLING BALL : BROOKHAVEN",
+  SubTitle = "S",
+  SaveFolder = "testando | redz lib v5.lua"
+})
+
+
+local Tab1 = Window:MakeTab({"TEST", "SKULL"})
+
+local Section = Tab1:AddSection({"🔴 Combate Ball - Brookhaven"})
+
+-- Serviços
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+
+-- Jogador local
+local localPlayer = Players.LocalPlayer
+
+-- Configurações ajustáveis
+local settings = {
+    ballPath = "Workspace/001_SoccerBalls/Soccer" .. localPlayer.Name,
+    ballHeight = 1.5, -- Altura da bola em relação ao torso
+    distance = 2.5, -- Distância da bola do jogador
+    forceMultiplier = 1.2, -- Multiplicador de força
+    flingIntensity = 50000, -- Intensidade do fling
+    autoTargetNearest = false, -- Alvo automático mais próximo
+    prediction = true -- Previsão de movimento
+}
+
+-- Variáveis globais
+getgenv().Target = nil
+local ball, connection, bodyForce, bodyPosition
+local lastTargetPosition = Vector3.new()
+
+-- Função para encontrar o jogador mais próximo
+local function findNearestPlayer()
+    local closestPlayer, closestDistance = nil, math.huge
+    local localCharacter = localPlayer.Character
+    if not localCharacter then return nil end
+    
+    local localRoot = localCharacter:FindFirstChild("HumanoidRootPart") or localCharacter:FindFirstChild("UpperTorso")
+    if not localRoot then return nil end
+    
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= localPlayer and player.Character then
+            local character = player.Character
+            local rootPart = character:FindFirstChild("HumanoidRootPart") or character:FindFirstChild("UpperTorso")
+            
+            if rootPart then
+                local distance = (localRoot.Position - rootPart.Position).Magnitude
+                if distance < closestDistance then
+                    closestDistance = distance
+                    closestPlayer = player.Name
+                end
+            end
+        end
+    end
+    
+    return closestPlayer
+end
+
+-- Remove qualquer força existente na bola
+local function clearForces(targetBall)
+    for _, obj in ipairs(targetBall:GetChildren()) do
+        if obj:IsA("BodyForce") or obj:IsA("BodyVelocity") or obj:IsA("BodyPosition") then
+            obj:Destroy()
+        end
+    end
+end
+
+-- Ignora colisão entre a bola e o personagem
+local function ignorePlayerCollision(targetBall, targetCharacter)
+    for _, part in ipairs(targetCharacter:GetDescendants()) do
+        if part:IsA("BasePart") then
+            for _, existingConstraint in ipairs(targetBall:GetChildren()) do
+                if existingConstraint:IsA("NoCollisionConstraint") and 
+                   (existingConstraint.Part0 == part or existingConstraint.Part1 == part) then
+                    existingConstraint:Destroy()
+                end
+            end
+            
+            local constraint = Instance.new("NoCollisionConstraint")
+            constraint.Part0 = targetBall
+            constraint.Part1 = part
+            constraint.Parent = targetBall
+        end
+    end
+end
+
+-- Configura a bola para seguir o alvo
+function setupBall()
+    local targetName = settings.autoTargetNearest and findNearestPlayer() or getgenv().Target
+    if not targetName then
+        warn("Nenhum jogador selecionado ou encontrado.")
+        return
+    end
+
+    local targetPlayer = Players:FindFirstChild(targetName)
+    if not targetPlayer then
+        warn("Jogador alvo não encontrado.")
+        return
+    end
+
+    local function setupForCharacter(character)
+        if not character then return end
+        
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if not humanoid or humanoid.Health <= 0 then return end
+        
+        local rootPart = character:FindFirstChild("HumanoidRootPart") or character:FindFirstChild("UpperTorso")
+        if not rootPart then return end
+
+        local success, foundBall = pcall(function()
+            local obj = workspace
+            for _, part in ipairs(settings.ballPath:split("/")) do
+                obj = obj:WaitForChild(part, 2)
+            end
+            return obj
+        end)
+
+        if not success or not foundBall then
+            warn("Bola não encontrada no caminho: " .. settings.ballPath)
+            return
+        end
+
+        ball = foundBall
+        ball.Anchored = false
+        ball.CanCollide = true
+        ball.Massless = false
+        ball.AssemblyLinearVelocity = Vector3.new()
+        ball.AssemblyAngularVelocity = Vector3.new()
+
+        clearForces(ball)
+        ignorePlayerCollision(ball, character)
+
+        -- Força para manter a bola flutuando
+        if bodyForce then bodyForce:Destroy() end
+        bodyForce = Instance.new("BodyForce")
+        bodyForce.Force = Vector3.new(0, ball:GetMass() * workspace.Gravity * settings.forceMultiplier, 0)
+        bodyForce.Parent = ball
+
+        -- Posicionamento da bola
+        if bodyPosition then bodyPosition:Destroy() end
+        bodyPosition = Instance.new("BodyPosition")
+        bodyPosition.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+        bodyPosition.P = settings.flingIntensity
+        bodyPosition.D = settings.flingIntensity * 0.3
+        bodyPosition.Parent = ball
+
+        if connection then
+            connection:Disconnect()
+        end
+
+        local toggle = true
+        lastTargetPosition = rootPart.Position
+        
+        connection = RunService.Heartbeat:Connect(function()
+            if not ball or not rootPart or not rootPart.Parent then
+                if connection then
+                    connection:Disconnect()
+                end
+                return
+            end
+
+            -- Previsão de movimento
+            local velocity = settings.prediction and (rootPart.Position - lastTargetPosition) * 30 or Vector3.new()
+            lastTargetPosition = rootPart.Position
+
+            local forward = rootPart.CFrame.LookVector
+            local right = rootPart.CFrame.RightVector
+            local offset = forward * (toggle and settings.distance or -settings.distance)
+            
+            -- Adiciona um pouco de variação vertical
+            local verticalOffset = Vector3.new(0, math.sin(tick() * 5) * 0.3, 0)
+            
+            local basePos = rootPart.Position + Vector3.new(0, settings.ballHeight, 0) + velocity
+            bodyPosition.Position = basePos + offset + verticalOffset
+
+            toggle = not toggle
+        end)
+    end
+
+    -- Configura para o personagem atual
+    if targetPlayer.Character then
+        setupForCharacter(targetPlayer.Character)
+    end
+
+    -- Reconecta caso o alvo renasça
+    targetPlayer.CharacterAdded:Connect(function(newCharacter)
+        task.wait(1) -- Espera o personagem carregar
+        setupForCharacter(newCharacter)
+    end)
+end
+
+-- UI Elements
+Tab1:AddButton({
+    Name = "🟢 Ativar Fling Ball",
+    Callback = function()
+        if getgenv().Target or settings.autoTargetNearest then
+            setupBall()
+        else
+            warn("Nenhum jogador selecionado. Use a dropdown primeiro.")
+        end
+    end
+})
+
+Tab1:AddButton({
+    Name = "🔴 Parar Fling Ball",
+    Callback = function()
+        if connection then
+            connection:Disconnect()
+        end
+        if ball then
+            clearForces(ball)
+        end
+    end
+})
+
+Tab1:AddToggle({
+    Name = "Alvo Automático",
+    Default = false,
+    Callback = function(value)
+        settings.autoTargetNearest = value
+        if value then
+            setupBall()
+        end
+    end
+})
+
+Tab1:AddToggle({
+    Name = "Previsão de Movimento",
+    Default = true,
+    Callback = function(value)
+        settings.prediction = value
+    end
+})
+
+Tab1:AddSlider({
+    Name = "Intensidade do Fling",
+    Min = 10000,
+    Max = 100000,
+    Default = 50000,
+    Increment = 1000,
+    Callback = function(value)
+        settings.flingIntensity = value
+        if bodyPosition then
+            bodyPosition.P = value
+            bodyPosition.D = value * 0.3
+        end
+    end
+})
+
+Tab1:AddSlider({
+    Name = "Distância da Bola",
+    Min = 1,
+    Max = 5,
+    Default = 2.5,
+    Increment = 0.1,
+    Callback = function(value)
+        settings.distance = value
+    end
+})
+
+Tab1:AddSlider({
+    Name = "Altura da Bola",
+    Min = 0.5,
+    Max = 3,
+    Default = 1.5,
+    Increment = 0.1,
+    Callback = function(value)
+        settings.ballHeight = value
+    end
+})
+
+-- Dropdown para seleção manual de alvo
+local playerList = {}
+for _, player in ipairs(Players:GetPlayers()) do
+    if player ~= localPlayer then
+        table.insert(playerList, player.Name)
+    end
+end
+
+Tab1:AddDropdown({
+    Name = "Selecionar Alvo",
+    Default = "",
+    Options = playerList,
+    Callback = function(value)
+        getgenv().Target = value
+        settings.autoTargetNearest = false
+        setupBall()
+    end
+})
+
+-- Atualiza a lista de jogadores quando alguém entra/sai
+Players.PlayerAdded:Connect(function(player)
+    if player ~= localPlayer then
+        table.insert(playerList, player.Name)
+        -- Aqui você precisaria atualizar o dropdown UI
+    end
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    for i, name in ipairs(playerList) do
+        if name == player.Name then
+            table.remove(playerList, i)
+            break
+        end
+    end
+    -- Atualiza o dropdown UI
+end)
