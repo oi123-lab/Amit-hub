@@ -2153,36 +2153,6 @@ Tab3:AddButton({
     Callback = removerBannedLots
 })
 
--- Seção: Personalização de Casa
-local Section = Tab3:AddSection({"<Personalização de Casa>"})
-
--- Função para gerar cores aleatórias
-local function getRandomColor()
-    return Color3.new(math.random(), math.random(), math.random())
-end
-
-local runningRainbow = false
-
-local function changeColor()
-    while runningRainbow do
-        local args = {
-            [1] = "ColorPickHouse",
-            [2] = getRandomColor()
-        }
-        game:GetService("ReplicatedStorage").RE:FindFirstChild("1Player1sHous1e"):FireServer(unpack(args))
-        wait(1) -- intervalo de mudança de cor
-    end
-end
-
--- Criação do Toggle para Rainbow House
-ToggleRainbow = Tab3:AddToggle({
-    Name = "Casa Colorida",
-    Default = false,
-    Callback = function(Value)
-        runningRainbow = Value
-        if runningRainbow then
-            spawn(changeColor)
-        end
     
 
 local Tab4 =
