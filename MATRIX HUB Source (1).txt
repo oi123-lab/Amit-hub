@@ -2190,7 +2190,8 @@ ToggleRainbow = Tab3:AddToggle({
 local Section = Tab3:AddSection({"<Ações Diversas>"})
 
 local runningBaby = false
-ToggleBaby = Tdo3:AddToggle({
+ToggleBaby = Tdo3:
+    AddToggle({
     Name = "Tirar E Colocar Bebês",
     Default = false,
     Callback = function(Value)
@@ -2216,7 +2217,8 @@ ToggleBaby = Tdo3:AddToggle({
 })
 
 local runningGarage = false
-ToggleGarage = Tab3:AddToggle({
+ToggleGarage = 
+    Tab3:AddToggle({
     Name = "Abrir e Fechar Garagem",
     Default = false,
     Callback = function(Value)
@@ -2236,7 +2238,8 @@ ToggleGarage = Tab3:AddToggle({
 })
 
 local runningCurtains = false
-ToggleCurtains = Tab3:AddToggle({
+ToggleCurtains = 
+    Tab3:AddToggle({
     Name = "Abrir e Fechar Cortinas",
     Default = false,
     Callback = function(Value)
@@ -2256,7 +2259,8 @@ ToggleCurtains = Tab3:AddToggle({
 })
 
 local runningLockDoors = false
-local ToggleLockDoors = Tab3:AddToggle({
+local ToggleLockDoors = 
+    Tab3:AddToggle({
     Name = "Abrir E Fechar Portas",
     Default = false,
     Callback = function(Value)
