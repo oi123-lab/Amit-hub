@@ -4,7 +4,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/Library-ui/re
 
 
 local Window = redzlib:MakeWindow({
-    Title = "Matrix Hub v4.3: BROOKHAVEN RP 🏡",
+    Title = "Matrix Hub v4.4: BROOKHAVEN RP 🏡",
     SubTitle = "By : Matrix Community",
     SaveFolder = "MATRIXHUB Folder"
 })
@@ -2912,18 +2912,18 @@ local function createPaintRollerTornado(height, radius, rotationSpeed, verticalS
 end
 
 -- Adiciona um botão para criar o tornado 
-Section = Tab9:AddSection({ Name = "Tornado de PaintRollers" })
+Section = Tab1:AddSection({ Name = "Tornado de PaintRollers" })
 
-Tab9:AddButton({ Name = "Criar Tornado de PaintRollers (Altura: 100, Raio: 5)", Callback = function() 
+Tab1:AddButton({ Name = "Criar Tornado de PaintRollers (Altura: 100, Raio: 5)", Callback = function() 
     createPaintRollerTornado(70, 5, 20, 0.5)  -- Ajuste os parâmetros conforme necessário 
 end })
 
-Tab9:AddButton({ Name = "Parar Processo de Construção", Callback = function() 
+Tab1:AddButton({ Name = "Parar Processo de Construção", Callback = function() 
     stopProcess = true 
     resetCharacter() 
 end })
 
-Tab:AddButton({
+Tab1:AddButton({
 	Name = "Mudar Animação do Tornado de PaintRoller",
 	Callback = function()
         local player = game:GetService("Players").LocalPlayer
