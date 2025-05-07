@@ -2276,7 +2276,7 @@ local ToggleLockDoors = Tab3:AddToggle({
 })
 
 
-local Tab9 = Window:MakeTab({"OP", "rbxassetid://10723344088"})
+local Tab4 = Window:MakeTab({"OP", "rbxassetid://10723344088"})
 
 local Section = Tab4:AddSection({"SOUND ALL"})
 
