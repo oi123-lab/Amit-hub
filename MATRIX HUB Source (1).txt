@@ -2274,3 +2274,306 @@ local ToggleLockDoors = Tab3:AddToggle({
         end
     end
 })
+
+
+local Tab9 = Window:MakeTab({"OP", "rbxassetid://10723344088"})
+
+local Section = Tab4:AddSection({"SOUND ALL"})
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+if not _G.audio_all_delay then
+  _G.audio_all_delay = 1
+end
+
+local function Audio_All_ClientSide(ID)
+
+  local function CheckFolderAudioAll()
+    local FolderAudio = workspace:FindFirstChild("Audio all client")
+    if FolderAudio then
+      return FolderAudio
+    else
+      local FolderAudio = Instance.new("Folder")
+      FolderAudio.Name = "Audio all client"
+      FolderAudio.Parent = workspace
+      return FolderAudio
+    end
+  end
+
+  local function CreateSound(ID)
+
+    if type(ID) ~= "number" then
+      print("Ensira o número")
+      return nil
+    end
+
+    local Folder_Audio = CheckFolderAudioAll()
+    if Folder_Audio then
+      local Sound = Instance.new("Sound")
+      Sound.SoundId = "rbxassetid://" .. ID
+      Sound.Volume = 1
+      Sound.Looped = false
+      Sound.Parent = Folder_Audio
+      Sound:Play()
+      task.wait(3)
+      Sound:Destroy()
+    end
+  end
+
+  CreateSound(ID)
+
+end
+
+local function Audio_All_ServerSide(ID)
+
+  if type(ID) ~= "number" then
+    print("Ensira um numero")
+    return nil
+  end
+
+  local GunSoundEvent = ReplicatedStorage:FindFirstChild("1Gu1nSound1s", true)
+  if GunSoundEvent then
+    GunSoundEvent:FireServer(workspace, ID, 1)
+  end
+end
+
+local audio_all_dropdown_value = nil
+
+Tab4:AddSection({"Audio all através de lista de IDS"})
+
+local soundList = {
+    {Name = "Grito Alto", ID = 5710016194},       -- Grito Alto
+    {Name = "Jumpscare Horroroso", ID = 85435253347146}, -- Jumpscare Horroroso
+    {Name = "Áudio Alto", ID = 6855150757},        -- Áudio Alto
+    {Name = "Ruído", ID = 120034877160791},        -- Ruído
+    {Name = "Jumpscare 2", ID = 110637995610528},  -- Jumpscare 2
+    {Name = "Risada Da Bruxa Minecraft", ID = 116214940486087}, -- Risada Da Bruxa Minecraft
+    {Name = "The Boiled One", ID = 137177653817621}, -- Boiola One Sanfona    
+    {Name = "Deitei Um Ave Maria Doido", ID = 128669424001766},
+    {Name = "Mandrake Detected", ID = 9068077052}, 
+    {Name = "Aaaaaaaaa", ID = 80156405968805}, 
+    {Name = "AAAHHHH", ID = 9084006093}, 
+    {Name = "amongus", ID = 6651571134}, 
+    {Name = "Sus", ID = 6701126635},     
+    {Name = "Gritao AAAAAAAAA", ID = 5853668794},     
+    {Name = "UHHHHH COFFCOFF", ID = 7056720271}, 
+    {Name = "SUS", ID = 7153419575},     
+}
+
+local options = {}
+
+for _, sound in ipairs(soundList) do
+    table.insert(options, sound.Name)
+end
+
+Tab4:AddDropdown({
+    Name = "Lista de Sons Irritantes",
+    Options = options,
+    Default = {},
+    MultSelect = false,
+    Callback = function(selectedName)
+        for _, sound in ipairs(soundList) do
+            if sound.Name == selectedName then
+                audio_all_dropdown_value = sound.ID
+                break
+            end
+        end
+    end
+})
+
+Tab4:AddButton({
+  Name = "Tocar audio",
+  Callback = function()
+    Audio_All_ServerSide(audio_all_dropdown_value)
+    task.spawn(function()
+      Audio_All_ClientSide(audio_all_dropdown_value)
+    end)
+  end
+})
+
+Tab4:AddToggle({
+  Name = "Tocar loop",
+  Default = false,
+  Callback = function(value)
+
+    getgenv().Audio_All_loop = value
+
+    while getgenv().Audio_All_loop do
+      Audio_All_ServerSide(audio_all_dropdown_value)
+      task.spawn(function()
+        Audio_All_ClientSide(audio_all_dropdown_value)
+      end)
+      task.wait(_G.audio_all_delay)
+    end
+  end
+})
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local audioID = 5229833733 -- ID fixo do áudio
+
+local function Audio_All_ClientSide(ID)
+    local function CheckFolderAudioAll()
+        local FolderAudio = workspace:FindFirstChild("Audio all client")
+        if not FolderAudio then
+            FolderAudio = Instance.new("Folder")
+            FolderAudio.Name = "Audio all client"
+            FolderAudio.Parent = workspace
+        end
+        return FolderAudio
+    end
+
+    local function CreateSound(ID)
+        if type(ID) ~= "number" then
+            print("Insira um número válido!")
+            return nil
+        end
+
+        local Folder_Audio = CheckFolderAudioAll()
+        if Folder_Audio then
+            local Sound = Instance.new("Sound")
+            Sound.SoundId = "rbxassetid://" .. ID
+            Sound.Volume = 1
+            Sound.Looped = false
+            Sound.Parent = Folder_Audio
+            Sound:Play()
+            task.wait(1) -- Tempo de espera antes de remover o som
+            Sound:Destroy()
+        end
+    end
+
+    CreateSound(ID)
+end
+
+local function Audio_All_ServerSide(ID)
+    if type(ID) ~= "number" then
+        print("Insira um número válido!")
+        return nil
+    end
+
+    local GunSoundEvent = ReplicatedStorage:FindFirstChild("1Gu1nSound1s", true)
+    if GunSoundEvent then
+        GunSoundEvent:FireServer(workspace, ID, 1)
+    end
+end
+
+Tab4:AddToggle({
+    Name = "Áudio Spam Estora ouvido - ⚠️",
+    Default = false,
+    Callback = function(value)
+        getgenv().Audio_All_loop_fast = value
+
+        while getgenv().Audio_All_loop_fast do
+            Audio_All_ServerSide(audioID)
+            task.spawn(function()
+                Audio_All_ClientSide(audioID)
+            end)
+            task.wait(0.00003)
+        end
+    end
+})
+
+local audio_all_textbox_value = nil
+
+local function CheckNumberInString(str)
+  return str:match("^%d+$") ~= nil
+end
+
+Tab9:AddSection({"Audio all através de (você que colocar seus próprios ids)"})
+
+Tab4:AddTextBox({
+  Name = "Adicionar id",
+  Default = "",
+  PlaceholderText = "Digite um id válido",
+  ClearText = true,
+  Callback = function(value)
+    audio_all_textbox_value = value
+  end
+})
+
+Tab4:AddButton({
+  Name = "Tocar audio",
+  Callback = function()
+    
+    local string_number = audio_all_textbox_value
+    if CheckNumberInString(string_number) then
+      Audio_All_ServerSide(tonumber(string_number))
+      task.spawn(function()
+        Audio_All_ClientSide(tonumber(string_number))
+      end)
+    else
+      print("A string não só tem número")
+    end
+  end
+})
+
+Tab4:AddToggle({
+  Name = "Tocar loop",
+  Default = false,
+  Callback = function(value)
+
+    getgenv().Audio_All_loop2 = value
+    local string_number = audio_all_textbox_value
+    
+    while getgenv().Audio_All_loop2 do
+      if CheckNumberInString(string_number) then
+        Audio_All_ServerSide(tonumber(string_number))
+        task.spawn(function()
+          Audio_All_ClientSide(tonumber(string_number))
+        end)
+      else
+        print("A string não só tem número")
+      end
+      task.wait(_G.audio_all_delay)
+    end
+  end
+})
+
+local soundList = {
+    {Name = "Grito Alto", ID = 5710016194},       -- Grito Alto
+    {Name = "Jumpscare Horroroso", ID = 85435253347146}, -- Jumpscare Horroroso
+    {Name = "Áudio Alto", ID = 6855150757},        -- Áudio Alto
+    {Name = "Ruído", ID = 120034877160791},        -- Ruído
+    {Name = "Jumpscare 2", ID = 110637995610528},  -- Jumpscare 2
+    {Name = "Risada Da Bruxa Minecraft", ID = 116214940486087}, -- Risada Da Bruxa Minecraft
+    {Name = "The Boiled One", ID = 137177653817621}, -- Boiola One Sanfona    
+    {Name = "Deitei Um Ave Maria Doido", ID = 128669424001766},
+    {Name = "Mandrake Detected", ID = 9068077052}, 
+    {Name = "Aaaaaaaaa", ID = 80156405968805}, 
+    {Name = "AAAHHHH", ID = 9084006093}, 
+    {Name = "amongus", ID = 6651571134}, 
+    {Name = "Sus", ID = 6701126635},     
+    {Name = "Gritao AAAAAAAAA", ID = 5853668794},     
+    {Name = "UHHHHH COFFCOFF", ID = 7056720271}, 
+    {Name = "SUS", ID = 7153419575},     
+}
+
+local options = {}
+
+for _, sound in ipairs(soundList) do
+    table.insert(options, sound.Name)
+end
+
+-- Criação do Dropdown de seleção de áudio
+Tab4:AddDropdown({
+    Name = "Selecione um Áudio Para Copiar",
+    Options = options,
+    Default = {},
+    MultSelect = false,
+    Callback = function(selectedName)
+        for _, sound in ipairs(soundList) do
+            if sound.Name == selectedName then
+                -- Quando o áudio for selecionado, copia o ID
+                local selectedID = sound.ID
+                setclipboard(tostring(selectedID))  -- Copia o ID para a área de transferência
+                -- Exibe uma notificação na tela
+                game:GetService("StarterGui"):SetCore("SendNotification", {
+                    Title = "ID Copiado!",
+                    Text = "ID do áudio: " .. selectedID,
+                    Duration = 5
+                })
+                print("ID copiado: " .. selectedID)  -- Exibe o ID no console
+                break
+            end
+        end
+    end
+})
