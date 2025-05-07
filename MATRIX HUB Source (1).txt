@@ -2183,105 +2183,10 @@ ToggleRainbow = Tab3:AddToggle({
         if runningRainbow then
             spawn(changeColor)
         end
-    end
-})
+    
 
--- Seção: Ações Diversas
-local Section = Tab3:AddSection({"<Ações Diversas>"})
-
-local runningBaby = false
-ToggleBaby = Tdo3:
-    AddToggle({
-    Name = "Tirar E Colocar Bebês",
-    Default = false,
-    Callback = function(Value)
-        runningBaby = Value
-        print("Toggle changed:", runningBaby)
-
-        if runningBaby then
-            spawn(function()
-                while runningBaby do
-                    local argsYes = { [1] = "BabyOptionYes" }
-                    game:GetService("ReplicatedStorage").RE:FindFirstChild("1Player1sHous1e"):FireServer(unpack(argsYes))
-
-                    wait(1)  -- Aumento do atraso para evitar sobrecarga do servidor
-
-                    local argsNo = { [1] = "BabyOptionNo" }
-                    game:GetService("ReplicatedStorage").RE:FindFirstChild("1Player1sHous1e"):FireServer(unpack(argsNo))
-
-                    wait(1)  -- Aumento do atraso para evitar sobrecarga do servidor
-                end
-            end)
-        end
-    end
-})
-
-local runningGarage = false
-ToggleGarage = 
-    Tab3:AddToggle({
-    Name = "Abrir e Fechar Garagem",
-    Default = false,
-    Callback = function(Value)
-        runningGarage = Value
-        print("Toggle changed:", runningGarage)
-
-        if runningGarage then
-            spawn(function()
-                while runningGarage do
-                    local args = { [1] = "GarageDoor" }
-                    game:GetService("ReplicatedStorage").RE:FindFirstChild("1Player1sHous1e"):FireServer(unpack(args))
-                    wait(1)  -- Intervalo para evitar sobrecarga
-                end
-            end)
-        end
-    end
-})
-
-local runningCurtains = false
-ToggleCurtains = 
-    Tab3:AddToggle({
-    Name = "Abrir e Fechar Cortinas",
-    Default = false,
-    Callback = function(Value)
-        runningCurtains = Value
-        print("Toggle changed:", runningCurtains)
-
-        if runningCurtains then
-            spawn(function()
-                while runningCurtains do
-                    local args = { [1] = "Curtains" }
-                    game:GetService("ReplicatedStorage").RE:FindFirstChild("1Player1sHous1e"):FireServer(unpack(args))
-                    wait(1)  -- Intervalo para evitar sobrecarga
-                end
-            end)
-        end
-    end
-})
-
-local runningLockDoors = false
-local ToggleLockDoors = 
-    Tab3:AddToggle({
-    Name = "Abrir E Fechar Portas",
-    Default = false,
-    Callback = function(Value)
-        runningLockDoors = Value
-        print("Toggle changed:", runningLockDoors)
-
-        if runningLockDoors then
-            spawn(function()
-                while runningLockDoors do
-                    local args = { [1] = "LockDoors" }
-                    game:GetService("ReplicatedStorage").RE:FindFirstChild("1Player1sHous1e"):FireServer(unpack(args))
-                    wait(1)  -- Intervalo para evitar sobrecarga
-                end
-            end)
-        end
-    end
-})
-
-
-
-local Tab4 = Window:MakeTab({"OP", "rbxassetid://10723344088"})
+local Tab4 =
+Window:MakeTab({"OP","rbxassetid://10723344088"})
 
 local Section = Tab4:AddSection({"SOUND ALL"})
 
