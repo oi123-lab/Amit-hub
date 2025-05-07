@@ -2156,7 +2156,7 @@ Tab3:AddButton({
     
 
 local Tab4 =
-Window:MakeTab({"OP","rbxassetid://10723344088"})
+Window:MakeTab({"SOUND ALL","RADIO"})
 
 local Section = Tab4:AddSection({"SOUND ALL"})
 
