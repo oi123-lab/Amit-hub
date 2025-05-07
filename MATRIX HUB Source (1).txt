@@ -2276,6 +2276,7 @@ local ToggleLockDoors = Tab3:AddToggle({
 })
 
 
+
 local Tab4 = Window:MakeTab({"OP", "rbxassetid://10723344088"})
 
 local Section = Tab4:AddSection({"SOUND ALL"})
@@ -2478,7 +2479,7 @@ local function CheckNumberInString(str)
   return str:match("^%d+$") ~= nil
 end
 
-Tab9:AddSection({"Audio all através de (você que colocar seus próprios ids)"})
+Tab4:AddSection({"Audio all através de (você que colocar seus próprios ids)"})
 
 Tab4:AddTextBox({
   Name = "Adicionar id",
