@@ -4,7 +4,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/Library-ui/re
 
 
 local Window = redzlib:MakeWindow({
-    Title = "Matrix Hub v4.3: BROOKHAVEN RP 🏡",
+    Title = "Matrix Hub v4.4: BROOKHAVEN RP 🏡",
     SubTitle = "By : Matrix Community",
     SaveFolder = "MATRIXHUB Folder"
 })
