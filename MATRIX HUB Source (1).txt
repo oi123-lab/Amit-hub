@@ -2701,28 +2701,6 @@ Toggle = Tab5:AddToggle({
     end
 })
 
-Tab5:AddButton({
-    Name = "Spam Car",
-    Callback = function()
-        task.spawn(function()
-            while true do
-                local remote = game:GetService("ReplicatedStorage"):FindFirstChild("RE"):FindFirstChild("1Ca1r")
-                if remote then
-                    local carList = {
-                        "Easter2025SolidMonsterTruck",
-                        "Easter2025EasterEggMotorcycle",
-                        "Easter2025SolidEggMotorcycle"
-                    }
-                    for _, car in ipairs(carList) do
-                        remote:FireServer("PickingCar", car)
-                        task.wait(0.1)
-                    end
-                end
-                task.wait(0.3)
-            end
-        end)
-end
-})
 
 
 local Tab6 = Window:MakeTab({"Avatar", "rbxassetid://10734952036"})
