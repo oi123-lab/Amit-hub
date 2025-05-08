@@ -1,5 +1,8 @@
 local Library=
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Xtentacion178/Lib27e/refs/heads/main/Yeudhs"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/tbao143/Library-ui/refs/heads/main/Redzhubui"))()
+
+
+
 
 
 
@@ -2877,3 +2880,714 @@ Tab6:AddButton({
 
 
 
+local Tab7 = Window:MakeTab({"Misc", "rbxassetid://10723344088"})
+
+local Section = Tab7:AddSection({"Aba Misc"})
+
+
+Tab7:AddButton({
+    Name = "Boombox 100% All",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local playerGui = player:FindFirstChild("PlayerGui")
+        if not playerGui then return end -- Verifica se o jogador tem PlayerGui
+
+        local boombox
+        local sg
+        local savedID = nil  -- Variável para armazenar o ID salvo
+        local listFrame = {}  -- Tabela para controlar múltiplos frames da boombox
+
+        -- Função para criar a Boombox
+        local function createBoombox()
+            boombox = Instance.new("Tool")
+            boombox.Name = "Boombox"
+            boombox.RequiresHandle = true
+            boombox.Parent = player.Backpack
+
+            local handle = Instance.new("Part")
+            handle.Name = "Handle"
+            handle.Size = Vector3.new(1, 1, 1)
+            handle.CanCollide = false
+            handle.Anchored = false
+            handle.Transparency = 1
+            handle.Parent = boombox
+
+            -- Função para criar a GUI de música
+            local function createGui()
+                -- Verifica se já existe um frame da boombox
+                if listFrame[player.UserId] then
+                    return  -- Interrompe a criação da GUI se já existir
+                end
+
+                -- Marca que a GUI foi criada para esse jogador
+                listFrame[player.UserId] = true
+
+                sg = Instance.new("ScreenGui")
+                sg.Name = "ChooseSongGui"
+                sg.Parent = playerGui  
+
+                local frame = Instance.new("Frame")
+                frame.Style = "RobloxRound"
+                frame.Size = UDim2.new(0.25, 0, 0.25, 0)
+                frame.Position = UDim2.new((1-frame.Size.X.Scale)/2, 0, (1-frame.Size.Y.Scale)/2, 0)
+                frame.Parent = sg
+                frame.Draggable = true
+
+                local text = Instance.new("TextLabel")
+                text.BackgroundTransparency = 1
+                text.TextStrokeTransparency = 0
+                text.TextColor3 = Color3.new(1, 1, 1)
+                text.Size = UDim2.new(1, 0, 0.6, 0)
+                text.TextScaled = true
+                text.Text = "Lay down the beat!\nPut in the ID number for a song you love that's been uploaded to ROBLOX.\nLeave it blank to stop playing music."
+                text.Parent = frame
+
+                local input = Instance.new("TextBox")
+                input.BackgroundColor3 = Color3.new(0, 0, 0)
+                input.BackgroundTransparency = 0.5
+                input.BorderColor3 = Color3.new(1, 1, 1)
+                input.TextColor3 = Color3.new(1, 1, 1)
+                input.TextStrokeTransparency = 1
+                input.TextScaled = true
+                input.Text = savedID or "142376088"  -- Usar o ID salvo ou o padrão
+                input.Size = UDim2.new(1, 0, 0.2, 0)
+                input.Position = UDim2.new(0, 0, 0.6, 0)
+                input.Parent = frame
+
+                local button = Instance.new("TextButton")
+                button.Style = "RobloxButton"
+                button.Size = UDim2.new(0.75, 0, 0.2, 0)
+                button.Position = UDim2.new(0.125, 0, 0.8, 0)
+                button.TextColor3 = Color3.new(1, 1, 1)
+                button.TextStrokeTransparency = 0
+                button.Text = "Play!"
+                button.TextScaled = true
+                button.Parent = frame
+
+                -- Função para tocar a música no servidor
+                local function playAudioAll(ID)
+                    if type(ID) ~= "number" then
+                        print("Insira um número válido!")
+                        return
+                    end
+
+                    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                    local GunSoundEvent = ReplicatedStorage:FindFirstChild("1Gu1nSound1s", true)
+                    if GunSoundEvent then
+                        GunSoundEvent:FireServer(workspace, ID, 1)
+                    end
+                end
+
+                -- Função para tocar a música localmente
+                local function playAudioLocal(ID)
+                    local sound = Instance.new("Sound")
+                    sound.SoundId = "rbxassetid://" .. ID
+                    sound.Volume = 1
+                    sound.Looped = false
+                    sound.Parent = player.Character or workspace
+                    sound:Play()
+                    task.wait(3)
+                    sound:Destroy()
+                end
+
+                -- Função do botão "Play!"
+                button.MouseButton1Click:Connect(function()
+                    local soundID = tonumber(input.Text)
+                    if soundID then
+                        savedID = soundID  -- Salva o ID que foi inserido
+                        playAudioAll(soundID) -- Toca para o servidor
+                        playAudioLocal(soundID) -- Toca para você também
+                    else
+                        print("ID inválido!")
+                    end
+
+                    -- Remove a GUI instantaneamente
+                    if sg then
+                        sg:Destroy()
+                        listFrame[player.UserId] = nil  -- Libera a GUI para futuras interações
+                    end
+                end)
+
+            end
+
+            -- Evento ao equipar a Boombox
+            boombox.Equipped:Connect(function()
+                -- Cria a GUI quando a Boombox é equipada, se ainda não existir
+                if not listFrame[player.UserId] then
+                    createGui()
+                end
+
+                -- Comando para equipar visualmente o Boombox no avatar
+                local args = {
+                    [1] = 1018548665  -- ID original
+                }
+                game:GetService("ReplicatedStorage").Remotes.Wear:InvokeServer(unpack(args))
+            end)
+
+            -- Evento ao desequipar a Boombox
+            boombox.Unequipped:Connect(function()
+                -- Remove a GUI quando o item for desequipado
+                if sg then
+                    sg:Destroy()
+                    sg = nil
+                end
+
+                -- Comando para remover a Boombox visual do avatar
+                local args = {
+                    [1] = 1018548665  -- ID original
+                }
+                game:GetService("ReplicatedStorage").Remotes.Wear:InvokeServer(unpack(args))
+
+                -- Libera a GUI para a criação de um novo frame caso o item seja re-equipado
+                listFrame[player.UserId] = nil
+            end)
+
+            -- Evento para detectar se a Boombox foi deletada da mochila
+            boombox.AncestryChanged:Connect(function(_, parent)
+                if not parent and sg then
+                    sg:Destroy()
+                    sg = nil
+                    listFrame[player.UserId] = nil  -- Permite criar a GUI novamente quando o item for removido
+                end
+            end)
+        end
+
+        -- Chama a função para criar a Boombox
+        createBoombox()
+    end
+})
+
+Tab7:AddButton({
+  Name = "Dark Blade",
+  Callback = function()
+    loadstring(game:HttpGet('https://pastebin.com/raw/6ctYevGX'))()
+  end
+})
+
+-- Seção: Modificações de Jogador
+local Section = Tab7:AddSection({"<Modificações de Jogador>"})
+
+Tab7:AddSlider({
+   Name = "Velocidade do Jogador",
+   Increase = 1,
+   MinValue = 16,
+   MaxValue = 888,
+   Default = 16,
+   Callback = function(Value)
+       local player = game.Players.LocalPlayer
+       local character = player.Character or player.CharacterAdded:Wait()
+       local humanoid = character:FindFirstChildOfClass("Humanoid")
+       
+       if humanoid then
+           humanoid.WalkSpeed = Value
+       end
+   end
+})
+
+
+Tab7:AddButton({
+    Name = "Get Trail fe",
+    Callback = function()
+        local Player = game.Players.LocalPlayer
+        local Character = Player.Character
+        local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+        local RootPart = Character:FindFirstChild("HumanoidRootPart")
+        local OldPos = RootPart.CFrame
+        
+        local function freezeHumanoid(humanoid)
+            humanoid.WalkSpeed = 0
+            humanoid.JumpPower = 0
+        end
+        
+        local function restoreHumanoid(humanoid)
+            humanoid.WalkSpeed = 16
+            humanoid.JumpPower = 50
+        end
+        
+        local firstPosition = CFrame.new(-349, 5, 98)
+        
+        local PoolClick = workspace.WorkspaceCom["001_Hospital"]:FindFirstChild("PoolClick")
+        
+        if PoolClick and PoolClick:FindFirstChild("ClickDetector") then
+            freezeHumanoid(Humanoid)
+            RootPart.CFrame = firstPosition
+            task.wait(1)
+            RootPart.CFrame = PoolClick.CFrame
+            fireclickdetector(PoolClick.ClickDetector)
+            task.wait(2)
+            RootPart.CFrame = OldPos
+            restoreHumanoid(Humanoid)
+        else
+            warn("PoolClick ou ClickDetector não encontrado!")
+        end
+    end
+})
+
+
+local Tab8 = Window:MakeTab({"Items", "shield"})
+
+local Section = Tab8:AddSection({"<Lag Server>"})
+
+local BNumber = 1000
+
+Tab8:AddToggle({
+    Name = "lag Basketball",
+    Default = false,
+    Callback = function(Value)
+        local BasketToggleH = Value
+        if BasketToggleH then
+            local Player = game.Players.LocalPlayer
+            local Backpack = Player.Backpack
+            local Mouse = Player:GetMouse()
+            local Character = Player.Character
+            local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+            local RootPart = Character:FindFirstChild("HumanoidRootPart")
+            local OldPos = RootPart.CFrame
+            local Clone = workspace.WorkspaceCom["001_GiveTools"].Basketball
+
+            for i = 1, BNumber do
+                task.wait()
+                RootPart.CFrame = Clone.CFrame
+                fireclickdetector(Clone.ClickDetector)
+            end
+            task.wait()
+            RootPart.CFrame = OldPos
+
+            while BasketToggleH do
+                task.wait()
+                for i, v in ipairs(Character:GetChildren()) do
+                    if v.Name == "Basketball" then
+                        task.wait()
+                        local args = {
+                            [1] = Mouse.Hit.p
+                        }
+                        v.ClickEvent:FireServer(unpack(args))
+                    end
+                end
+            end
+        end
+    end
+})
+
+Tab8:AddSlider({
+    Name = "PORCENTAGEM De Basketball",
+    MinValue = 1,
+    MaxValue = 1000,
+    Default = BNumber,
+    Increase = 1,
+    Callback = function(Value)
+        BNumber = Value
+    end
+})
+
+local cleartoolremote = game:GetService("ReplicatedStorage").RE:FindFirstChild("1Clea1rTool1s") 
+local picktoolremote = game:GetService("ReplicatedStorage").RE:FindFirstChild("1Too1l")
+
+-- Variável global para controlar a interrupção do processo 
+local stopProcess = false
+
+-- Função para resetar o personagem 
+local function resetCharacter() 
+    local player = game.Players.LocalPlayer 
+    if player.Character then 
+        player.Character:BreakJoints()  -- Reseta o personagem 
+    end 
+end
+
+-- Função para criar um tornado de PaintRollers 
+local function createPaintRollerTornado(height, radius, rotationSpeed, verticalSpacing)
+    -- Reinicia a variável de controle ao iniciar o processo
+    stopProcess = false
+    local nametools = "PaintRoller Tornado"
+    local oldcframe = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame    
+
+    -- Verifica se o personagem está sentado e o levanta   
+    if game.Players.LocalPlayer.Character.Humanoid.Sit then       
+        task.wait()       
+        game.Players.LocalPlayer.Character.Humanoid.Sit = false   
+    end    
+
+    wait()   
+    cleartoolremote:FireServer("ClearAllTools")    
+
+    -- Remove a câmera se existir   
+    if workspace:FindFirstChild("Camera") then       
+        workspace.Camera:Destroy()   
+    end    
+
+    -- Teleporta o personagem para uma posição segura   
+    for _ = 1, 2 do       
+        task.wait()       
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(999999999, -490, 999999999)   
+    end    
+
+    task.wait()   
+    game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true   
+    wait()    
+
+    -- Loop de duplicação das ferramentas   
+    for i = 1, height do       
+        if stopProcess then           
+            game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false           
+            resetCharacter()           
+            return       
+        end        
+
+        -- Pega a ferramenta       
+        picktoolremote:InvokeServer("PickingTools", "PaintRoller")       
+        local tool = game.Players.LocalPlayer.Backpack:WaitForChild("PaintRoller")       
+        tool.Parent = game.Players.LocalPlayer.Character        
+
+        if stopProcess then           
+            game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false           
+            resetCharacter()           
+            return       
+        end        
+
+        wait()       
+        tool.Handle.Name = "H⁥a⁥n⁥d⁥l⁥e"       
+        tool.Parent = game.Players.LocalPlayer.Backpack       
+        tool.Parent = game.Players.LocalPlayer.Character        
+
+        -- Espera até que a ferramenta seja removida do personagem       
+        repeat           
+            if workspace:FindFirstChild("Camera") then               
+                workspace.Camera:Destroy()           
+            end           
+            wait()       
+        until not game.Players.LocalPlayer.Character:FindFirstChild("PaintRoller")   
+    end    
+
+    -- Finaliza o processo   
+    game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false   
+    repeat wait() until not game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")   
+    repeat wait() until game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")    
+
+    -- Posicionamento dos PaintRollers em forma de tornado   
+    local tools = game.Players.LocalPlayer.Backpack:GetChildren()   
+    local centerPosition = Vector3.new(0, 0, 0)    
+
+    for i = 1, #tools do       
+        if tools[i]:IsA("Tool") then           
+            -- Cálculo da posição em espiral           
+            local angle = math.rad(i * rotationSpeed)           
+            local x = math.cos(angle) * radius           
+            local z = math.sin(angle) * radius           
+            local y = (i - 1) * verticalSpacing  -- Altura incremental            
+
+            tools[i].Grip = CFrame.new(centerPosition + Vector3.new(x, y, z))           
+            tools[i].Name = nametools       
+        end   
+    end    
+
+    -- Retorna o personagem à posição original   
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = oldcframe   
+    wait(0.5)    
+
+    -- Move as ferramentas para o personagem   
+    for _, tool in ipairs(game.Players.LocalPlayer.Backpack:GetChildren()) do       
+        if tool:IsA("Tool") and tool.Name == nametools then           
+            tool.Parent = game.Players.LocalPlayer.Character       
+        end   
+    end
+end
+
+-- Adiciona um botão para criar o tornado 
+Section = Tab8:AddSection({ Name = "Tornado de PaintRollers" })
+
+Tab8:AddButton({ Name = "Criar Tornado de PaintRollers (Altura: 100, Raio: 5)", Callback = function() 
+    createPaintRollerTornado(70, 5, 20, 0.5)  -- Ajuste os parâmetros conforme necessário 
+end })
+
+Tab8:AddButton({ Name = "Parar Processo de Construção", Callback = function() 
+    stopProcess = true 
+    resetCharacter() 
+end })
+
+Tab8:AddButton({
+	Name = "Mudar Animação do Tornado de PaintRoller",
+	Callback = function()
+        local player = game:GetService("Players").LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local backpack = player:WaitForChild("Backpack")
+
+        -- Move todos os PaintRollers do tipo Tornado para o personagem
+        for _, tool in ipairs(backpack:GetChildren()) do
+            if tool:IsA("Tool") and tool.Name == "PaintRoller Tornado" then
+                tool.Parent = character
+            end
+        end
+
+        task.wait(0.2) -- Dá tempo para mover tudo com segurança
+
+        -- Dispara o evento CycleNextAnimation em cada um
+        for _, tool in ipairs(character:GetChildren()) do
+            if tool:IsA("Tool") and tool.Name == "PaintRoller Tornado" then
+                if tool:FindFirstChild("CycleNextAnimation") then
+                    tool.CycleNextAnimation:FireServer()
+                end
+            end
+        end
+	end    
+})
+
+Tab8:AddButton({
+	Name = "Equipar Todas as Tools",
+	Callback = function()
+      		local function equiptool()
+  for i,v in ipairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+    if v:IsA("Tool") then
+      v.Parent = game.Players.LocalPlayer.Character
+    end
+  end
+end
+equiptool()
+  	end    
+})
+
+
+local Tab9 = Window:MakeTab({"Esp", "rbxassetid://10747382504"})
+
+local Section = Tab9:AddSection({"Aba Esp"})
+
+local ESPEnabled = false
+local CurrentColor = Color3.fromRGB(255, 255, 255) -- Cor inicial branca
+local RainbowEnabled = false
+
+local function createESP(player)
+    if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
+        return
+    end
+
+    -- Adicionar Highlight para destacar o jogador
+    local highlight = Instance.new("Highlight")
+    highlight.Name = "ESP_Highlight"
+    highlight.Adornee = player.Character
+    highlight.FillColor = CurrentColor
+    highlight.FillTransparency = 0.5
+    highlight.OutlineColor = Color3.fromRGB(0, 0, 0)
+    highlight.OutlineTransparency = 0
+    highlight.Parent = player.Character
+
+    -- Criar BillboardGui para exibir as informações
+    local billboard = Instance.new("BillboardGui")
+    billboard.Name = "ESP_Info"
+    billboard.Adornee = player.Character:FindFirstChild("HumanoidRootPart")
+    billboard.Size = UDim2.new(0, 150, 0, 50)  -- Diminuindo o tamanho da GUI
+    billboard.StudsOffset = Vector3.new(0, 3, 0)
+    billboard.AlwaysOnTop = true
+    billboard.Parent = player.Character
+
+    -- Nome do jogador
+    local nameLabel = Instance.new("TextLabel")
+    nameLabel.Size = UDim2.new(1, 0, 0.2, 0)
+    nameLabel.BackgroundTransparency = 1
+    nameLabel.Text = player.Name
+    nameLabel.TextColor3 = CurrentColor
+    nameLabel.TextStrokeTransparency = 0
+    nameLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+    nameLabel.TextScaled = true
+    nameLabel.Font = Enum.Font.Code -- Fonte digital
+    nameLabel.Parent = billboard
+
+    -- Distância
+    local distanceLabel = Instance.new("TextLabel")
+    distanceLabel.Size = UDim2.new(1, 0, 0.2, 0)
+    distanceLabel.Position = UDim2.new(0, 0, 0.2, 0)
+    distanceLabel.BackgroundTransparency = 1
+    distanceLabel.Text = "Distância: Calculando..."
+    distanceLabel.TextColor3 = CurrentColor
+    distanceLabel.TextStrokeTransparency = 0
+    distanceLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+    distanceLabel.TextScaled = true
+    distanceLabel.Font = Enum.Font.Code -- Fonte digital
+    distanceLabel.Parent = billboard
+
+    -- Idade da conta
+    local ageLabel = Instance.new("TextLabel")
+    ageLabel.Size = UDim2.new(1, 0, 0.2, 0)
+    ageLabel.Position = UDim2.new(0, 0, 0.4, 0)
+    ageLabel.BackgroundTransparency = 1
+    ageLabel.Text = "Idade da conta: " .. player.AccountAge .. " dias"
+    ageLabel.TextColor3 = CurrentColor
+    ageLabel.TextStrokeTransparency = 0
+    ageLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+    ageLabel.TextScaled = true
+    ageLabel.Font = Enum.Font.Code -- Fonte digital
+    ageLabel.Parent = billboard
+
+    -- Status de vida
+    local healthLabel = Instance.new("TextLabel")
+    healthLabel.Size = UDim2.new(1, 0, 0.2, 0)
+    healthLabel.Position = UDim2.new(0, 0, 0.6, 0)
+    healthLabel.BackgroundTransparency = 1
+    healthLabel.Text = "Vida: " .. math.floor(player.Character.Humanoid.Health)
+    healthLabel.TextColor3 = CurrentColor
+    healthLabel.TextStrokeTransparency = 0
+    healthLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+    healthLabel.TextScaled = true
+    healthLabel.Font = Enum.Font.Code -- Fonte digital
+    healthLabel.Parent = billboard
+
+    -- Status de sentado
+    local sittingLabel = Instance.new("TextLabel")
+    sittingLabel.Size = UDim2.new(1, 0, 0.2, 0)
+    sittingLabel.Position = UDim2.new(0, 0, 0.8, 0)
+    sittingLabel.BackgroundTransparency = 1
+    sittingLabel.Text = "Sentado: Não"
+    sittingLabel.TextColor3 = CurrentColor
+    sittingLabel.TextStrokeTransparency = 0
+    sittingLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+    sittingLabel.TextScaled = true
+    sittingLabel.Font = Enum.Font.Code -- Fonte digital
+    sittingLabel.Parent = billboard
+
+    -- Atualizar distância, saúde e status de sentado continuamente
+    task.spawn(function()
+        while ESPEnabled and player.Character and player.Character:FindFirstChild("HumanoidRootPart") do
+            local distance = (player.Character.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+            distanceLabel.Text = string.format("Distância: %.2f", distance)
+            healthLabel.Text = "Vida: " .. math.floor(player.Character.Humanoid.Health)
+            sittingLabel.Text = player.Character.Humanoid.Sit == true and "Sentado: Sim" or "Sentado: Não"
+
+            -- Atualizar cor dinamicamente
+            highlight.FillColor = CurrentColor
+            nameLabel.TextColor3 = CurrentColor
+            distanceLabel.TextColor3 = CurrentColor
+            ageLabel.TextColor3 = CurrentColor
+            healthLabel.TextColor3 = CurrentColor
+            sittingLabel.TextColor3 = CurrentColor
+
+            task.wait(0.1)
+        end
+    end)
+end
+
+local function toggleESP(enabled)
+    ESPEnabled = enabled
+    if ESPEnabled then
+        for _, player in pairs(game.Players:GetPlayers()) do
+            if player ~= game.Players.LocalPlayer and not player.Character:FindFirstChild("ESP_Info") then
+                createESP(player)
+            end
+        end
+
+        game.Players.PlayerAdded:Connect(function(player)
+            if ESPEnabled then
+                player.CharacterAdded:Connect(function()
+                    createESP(player)
+                end)
+            end
+        end)
+
+        game.Players.PlayerRemoving:Connect(function(player)
+            if player.Character then
+                if player.Character:FindFirstChild("ESP_Info") then
+                    player.Character.ESP_Info:Destroy()
+                end
+                if player.Character:FindFirstChild("ESP_Highlight") then
+                    player.Character.ESP_Highlight:Destroy()
+                end
+            end
+        end)
+    else
+        for _, player in pairs(game.Players:GetPlayers()) do
+            if player.Character then
+                if player.Character:FindFirstChild("ESP_Info") then
+                    player.Character.ESP_Info:Destroy()
+                end
+                if player.Character:FindFirstChild("ESP_Highlight") then
+                    player.Character.ESP_Highlight:Destroy()
+                end
+            end
+        end
+    end
+end
+
+local function setESPColor(color)
+    CurrentColor = color
+    RainbowEnabled = false -- Desativar Rainbow ao selecionar uma cor
+end
+
+local function enableRainbow()
+    RainbowEnabled = true
+    task.spawn(function()
+        while RainbowEnabled do
+            local time = tick() * 5
+            CurrentColor = Color3.fromHSV((time % 360) / 360, 1, 1)
+            task.wait(0.1)
+        end
+    end)
+end
+
+-- Toggle para ativar/desativar ESP
+Tab9:AddToggle({
+    Name = "ESP",
+    Default = false, -- Inicialmente desativado
+    Callback = function(Value)
+        toggleESP(Value)
+    end
+})
+
+-- Conectar evento para reativar o ESP após a morte
+game.Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        -- Verificar se o ESP está ativado e recriar o ESP para o jogador
+        if ESPEnabled then
+            createESP(player)
+        end
+    end)
+end)
+
+-- Dropdown para seleção de cor
+Tab9:AddDropdown({
+    Name = "Cores do ESP",
+    Options = {"Azul", "Vermelho", "Verde", "Amarelo", "Roxo", "Cinza", "Preto", "Branco", "Laranja", "Rosa", "Marrom", "Rainbow"},
+    Default = {"Branco"},
+    Callback = function(selected)
+        if selected == "Azul" then
+            setESPColor(Color3.fromRGB(0, 0, 255))
+        elseif selected == "Vermelho" then
+            setESPColor(Color3.fromRGB(255, 0, 0))
+        elseif selected == "Verde" then
+            setESPColor(Color3.fromRGB(0, 255, 0))
+        elseif selected == "Amarelo" then
+            setESPColor(Color3.fromRGB(255, 255, 0))
+        elseif selected == "Roxo" then
+            setESPColor(Color3.fromRGB(128, 0, 128))
+        elseif selected == "Cinza" then
+            setESPColor(Color3.fromRGB(128, 128, 128))
+        elseif selected == "Preto" then
+            setESPColor(Color3.fromRGB(0, 0, 0))
+        elseif selected == "Branco" then
+            setESPColor(Color3.fromRGB(255, 255, 255))
+        elseif selected == "Laranja" then
+            setESPColor(Color3.fromRGB(255, 165, 0))
+        elseif selected == "Rosa" then
+            setESPColor(Color3.fromRGB(255, 192, 203))
+        elseif selected == "Marrom" then
+            setESPColor(Color3.fromRGB(139, 69, 19))
+        elseif selected == "Rainbow" then
+            enableRainbow()
+        end
+    end
+})
+
+
+local Tab10 = Window:MakeTab({"Scripts", "rbxassetid://10709806277"})
+
+local Section = Tab10:AddSection({"Aba Scripts"})
+
+Tab10:AddButton({
+  Name = "Infinite Yield Matrix Hub",
+  Callback = function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/oi123-lab/Matrix-admin/refs/heads/main/Matrix%20admin.txt'))()
+  end
+})
+
+Tab10:AddButton({
+  Name = "Ant Lag V2",
+  Callback = function()
+    loadstring(game:HttpGet('https://pastebin.com/raw/ureZEHue'))()
+  end
+})
