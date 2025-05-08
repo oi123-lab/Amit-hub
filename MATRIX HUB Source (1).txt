@@ -2455,5 +2455,425 @@ Tab4:AddDropdown({
                 break
             end
         end
+
+local Tab5 = Window:MakeTab({"Car", "rbxassetid://10709783137"})
+
+local Section = Tab5:AddSection({"Aba Car"})
+
+local Section = Tab5:AddSection({"Velocidade"})
+
+-- Variável global para armazenar a velocidade do carro
+local carSpeed = 0
+
+-- TextBox para escolher a velocidade do carro
+Tab5:AddTextBox({
+    Name = "Escolher Velocidade",
+    Default = "Requer Premium",
+    PlaceholderText = "Insira a velocidade do carro",
+    ClearTextOnFocus = true,
+    Callback = function(value)
+        carSpeed = tonumber(value)  -- Converte o valor para número
+        if carSpeed then
+            print("Velocidade configurada para:", carSpeed)  -- Mensagem de depuração
+        else
+            print("Por favor, insira um valor numérico válido.")
+        end
     end
 })
+
+-- Botão para aplicar a velocidade ao carro
+Tab5:AddButton({
+    Name = "Aplicar Velocidade",
+    Callback = function()
+        if carSpeed and carSpeed > 0 then
+            -- Converte `carSpeed` para string conforme o novo padrão
+            local args = {
+                [1] = "PlayerGiveSpeedLower",
+                [2] = carSpeed  -- Converte para string para enviar ao servidor
+            }
+
+            -- Verifica se o evento realmente existe
+            local event = game:GetService("ReplicatedStorage").RE:FindFirstChild("1Player1sCa1r")
+            if event then
+                event:FireServer(unpack(args))
+                print("Velocidade aplicada com sucesso:", carSpeed)
+            else
+                print("Erro: Evento '1Player1sCa1r' não encontrado.")
+            end
+        else
+            print("Por favor, insira uma velocidade válida na TextBox antes de aplicar.")
+        end
+    end
+})
+
+local Section = Tab5:AddSection({"Music Box"})
+
+-- TextBox para inserir o ID da música
+Tab5:AddTextBox({
+    Name = "Música Box",
+    Default = "Requer Premium",
+    PlaceholderText = "Id Music", -- Alterado para PlaceholderText
+    ClearTextOnFocus = true,
+    Callback = function(value)
+        musicId = value
+        if musicId and musicId ~= "" then
+            print("ID da música configurado para:", musicId)  -- Mensagem de depuração
+        else
+            print("Por favor, insira um ID de música válido.")
+        end
+    end
+})
+
+-- Botão para ativar a música
+Tab5:AddButton({
+    Name = "Ativar Música", -- Alterado para Name
+    Callback = function()
+        if musicId and musicId ~= "" then
+            local args = {
+                [1] = "PickingCarMusicText",
+                [2] = musicId  -- Usar o ID de música inserido na TextBox
+            }
+
+            -- Verifica se o evento existe e dispara o evento com o ID da música
+            local event = game:GetService("ReplicatedStorage").RE:FindFirstChild("1Player1sCa1r")
+            if event then
+                event:FireServer(unpack(args))
+                print("Música ativada com ID:", musicId)
+            else
+                print("Erro: Evento '1Player1sCa1r' não encontrado.")
+            end
+        else
+            print("Por favor, insira um ID de música válido na TextBox.")
+        end
+    end
+})
+
+local Section = Tab5:AddSection({"Outros"})
+
+local Toggle
+local isActive = false -- Variável de controle do loop
+
+Tab5:AddToggle({
+    Name = "Texto Invasão!",
+    Default = false,
+    Callback = function(Value)
+        isActive = Value -- Atualiza o estado do loop
+
+        if isActive then
+            -- Inicia o loop em uma corrotina
+            coroutine.wrap(function()
+                while isActive do
+                    -- Tabela de comandos a serem executados
+                    local commands = {
+                        { [1] = "ReturningSemiName", [2] = "INVASÃO" },
+                        { [1] = "ReturningSemiName", [2] = "SOFRAM" },
+                        { [1] = "ReturningSemiName", [2] = "ESCURIDÃO" },
+                        { [1] = "ReturningSemiName", [2] = "RAIVA" },
+                        { [1] = "ReturningSemiName", [2] = "FRACOS" }
+                    }
+
+                    -- Executa cada comando sequencialmente
+                    for _, args in ipairs(commands) do
+                        if not isActive then break end -- Interrompe se o Toggle for desativado
+                        game:GetService("ReplicatedStorage").RE:FindFirstChild("1Cemeter1y"):FireServer(unpack(args))
+                        wait(1) -- Aguarda 1 segundo entre os comandos (ajuste conforme necessário)
+                    end
+                end
+            end)()
+        end
+    end
+})
+
+-- Serviços para Rainbow Car
+local args = {
+    [1] = "PickingCarColor",
+    [2] = nil --[[Color3]]
+}
+
+-- Função para mudar a cor aleatoriamente
+local function getRandomColor()
+    return Color3.new(math.random(), math.random(), math.random())
+end
+
+local running = false
+local changingColor = false -- Nova variável para controlar a execução da função
+
+-- Função para iniciar/parar a mudança de cor
+local function changeColor()
+    changingColor = true -- Define que a mudança de cor está em andamento
+    while running do
+        args[2] = getRandomColor()
+        game:GetService("ReplicatedStorage").RE:FindFirstChild("1Player1sCa1r"):FireServer(unpack(args))
+        
+        wait(1) -- intervalo de mudança de cor, ajustado para prevenir kick
+    end
+    changingColor = false -- Redefine quando a execução é concluída
+end
+
+-- Criação do Toggle para Rainbow Car com a nova estrutura
+local RainbowCarToggle = Tab5:AddToggle({
+    Name = "Rainbow Car", -- Alterado para Name
+    Default = false,
+    Callback = function(Value)
+        running = Value
+        if running and not changingColor then
+            spawn(changeColor)  -- Inicia a mudança de cor se o Toggle estiver ativo e não estiver mudando
+        elseif not running then
+            print("Rainbow Car desativado.")
+        end
+    end
+})
+
+-- Funções auxiliares para controle do Toggle
+RainbowCarToggle:Set(false) -- Define o estado inicial como "desligado"
+
+local isRunning = false -- Variável para controlar o estado do loop
+
+Toggle = Tab5:AddToggle({
+    Name = "Loop Duke 1",
+    Default = false,
+    Callback = function(Value)
+        if Value then
+            isRunning = true -- Define como verdadeiro quando o toggle é ativado
+            while isRunning do
+                local args = {
+                    [1] = "Duke1"
+                }
+                
+                game:GetService("ReplicatedStorage").RE:FindFirstChild("1Player1sCa1r"):FireServer(unpack(args))
+                
+                wait(1) -- Espera 3 segundos antes de executar novamente
+            end
+        else
+            isRunning = false -- Define como falso quando o toggle é desativado
+        end
+    end
+})
+
+local isRunning = false -- Variável para controlar o estado do loop
+
+Toggle = Tab5:AddToggle({
+    Name = "Loop Duke 2",
+    Default = false,
+    Callback = function(Value)
+        if Value then
+            isRunning = true -- Define como verdadeiro quando o toggle é ativado
+            while isRunning do
+                local args = {
+                    [1] = "Duke"
+                }
+                
+                game:GetService("ReplicatedStorage").RE:FindFirstChild("1Player1sCa1r"):FireServer(unpack(args))
+                
+                wait(1) -- Espera 3 segundos antes de executar novamente
+            end
+        else
+            isRunning = false -- Define como falso quando o toggle é desativado
+        end
+    end
+})
+
+local isRunning = false -- Variável para controlar o estado do loop
+
+Toggle = Tab5:AddToggle({
+    Name = "Loop Fire",
+    Default = false,
+    Callback = function(Value)
+        if Value then
+            isRunning = true -- Define como verdadeiro quando o toggle é ativado
+            while isRunning do
+                local args = {
+                    [1] = "Fire"
+                }
+                
+                game:GetService("ReplicatedStorage").RE:FindFirstChild("1Player1sCa1r"):FireServer(unpack(args))
+                
+                wait(1) -- Espera 3 segundos antes de executar novamente
+            end
+        else
+            isRunning = false -- Define como falso quando o toggle é desativado
+        end
+    end
+})
+    end
+})
+
+Tab5:AddButton({
+    Name = "Spam Car",
+    Callback = function()
+        task.spawn(function()
+            while true do
+                local remote = game:GetService("ReplicatedStorage"):FindFirstChild("RE"):FindFirstChild("1Ca1r")
+                if remote then
+                    local carList = {
+                        "Easter2025SolidMonsterTruck",
+                        "Easter2025EasterEggMotorcycle",
+                        "Easter2025SolidEggMotorcycle"
+                    }
+                    for _, car in ipairs(carList) do
+                        remote:FireServer("PickingCar", car)
+                        task.wait(0.1)
+                    end
+                end
+                task.wait(0.3)
+            end
+        end)
+end
+})
+
+
+local Tab6 = Window:MakeTab({"Avatar", "rbxassetid://10734952036"})
+
+local Section = Tab6:AddSection({"Aba Avatar"})
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Remotes = ReplicatedStorage:WaitForChild("Remotes")
+
+local Target = nil
+
+-- Função para obter os nomes dos jogadores
+local function GetPlayerNames()
+    local PlayerNames = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        table.insert(PlayerNames, player.Name)
+    end
+    return PlayerNames
+end
+
+-- Dropdown de seleção de jogador
+local Dropdown = Tab6:AddDropdown({
+    Name = "Selecionar Jogador Para a Cópia",
+    Options = GetPlayerNames(),
+    Default = Target,
+    Callback = function(Value)
+        Target = Value
+    end
+})
+
+-- Atualiza opções do dropdown quando alguém entra ou sai
+local function UpdateDropdown()
+    Dropdown:Refresh(GetPlayerNames(), true)
+end
+
+Players.PlayerAdded:Connect(UpdateDropdown)
+Players.PlayerRemoving:Connect(UpdateDropdown)
+
+-- Botão de copiar avatar
+Tab6:AddButton({
+    Name = "Copy Avatar",
+    Callback = function()
+        if not Target then return end
+
+        local LP = Players.LocalPlayer
+        local LChar = LP.Character
+        local TPlayer = Players:FindFirstChild(Target)
+
+        if TPlayer and TPlayer.Character then
+            local LHumanoid = LChar and LChar:FindFirstChildOfClass("Humanoid")
+            local THumanoid = TPlayer.Character:FindFirstChildOfClass("Humanoid")
+
+            if LHumanoid and THumanoid then
+                -- RESETAR LOCALPLAYER
+                local LDesc = LHumanoid:GetAppliedDescription()
+
+                -- Remover acessórios, roupas e face atuais
+                for _, acc in ipairs(LDesc:GetAccessories(true)) do
+                    if acc.AssetId and tonumber(acc.AssetId) then
+                        Remotes.Wear:InvokeServer(tonumber(acc.AssetId))
+                        task.wait(0.2)
+                    end
+                end
+
+                if tonumber(LDesc.Shirt) then
+                    Remotes.Wear:InvokeServer(tonumber(LDesc.Shirt))
+                    task.wait(0.2)
+                end
+
+                if tonumber(LDesc.Pants) then
+                    Remotes.Wear:InvokeServer(tonumber(LDesc.Pants))
+                    task.wait(0.2)
+                end
+
+                if tonumber(LDesc.Face) then
+                    Remotes.Wear:InvokeServer(tonumber(LDesc.Face))
+                    task.wait(0.2)
+                end
+
+                -- COPIAR DO JOGADOR ALVO
+                local PDesc = THumanoid:GetAppliedDescription()
+
+                -- Enviar partes do corpo
+                local argsBody = {
+                    [1] = {
+                        [1] = PDesc.Torso,
+                        [2] = PDesc.RightArm,
+                        [3] = PDesc.LeftArm,
+                        [4] = PDesc.RightLeg,
+                        [5] = PDesc.LeftLeg,
+                        [6] = PDesc.Head
+                    }
+                }
+                Remotes.ChangeCharacterBody:InvokeServer(unpack(argsBody))
+                task.wait(0.5)
+
+                if tonumber(PDesc.Shirt) then
+                    Remotes.Wear:InvokeServer(tonumber(PDesc.Shirt))
+                    task.wait(0.3)
+                end
+
+                if tonumber(PDesc.Pants) then
+                    Remotes.Wear:InvokeServer(tonumber(PDesc.Pants))
+                    task.wait(0.3)
+                end
+
+                if tonumber(PDesc.Face) then
+                    Remotes.Wear:InvokeServer(tonumber(PDesc.Face))
+                    task.wait(0.3)
+                end
+
+                for _, v in ipairs(PDesc:GetAccessories(true)) do
+                    if v.AssetId and tonumber(v.AssetId) then
+                        Remotes.Wear:InvokeServer(tonumber(v.AssetId))
+                        task.wait(0.3)
+                    end
+                end
+
+                local SkinColor = TPlayer.Character:FindFirstChild("Body Colors")
+                if SkinColor then
+                    Remotes.ChangeBodyColor:FireServer(tostring(SkinColor.HeadColor))
+                    task.wait(0.3)
+                end
+
+                if tonumber(PDesc.IdleAnimation) then
+                    Remotes.Wear:InvokeServer(tonumber(PDesc.IdleAnimation))
+                    task.wait(0.3)
+                end
+
+                -- Nome, bio e cor
+                local Bag = TPlayer:FindFirstChild("PlayersBag")
+                if Bag then
+                    if Bag:FindFirstChild("RPName") and Bag.RPName.Value ~= "" then
+                        Remotes.RPNameText:FireServer("RolePlayName", Bag.RPName.Value)
+                        task.wait(0.3)
+                    end
+                    if Bag:FindFirstChild("RPBio") and Bag.RPBio.Value ~= "" then
+                        Remotes.RPNameText:FireServer("RolePlayBio", Bag.RPBio.Value)
+                        task.wait(0.3)
+                    end
+                    if Bag:FindFirstChild("RPNameColor") then
+                        Remotes.RPNameColor:FireServer("PickingRPNameColor", Bag.RPNameColor.Value)
+                        task.wait(0.3)
+                    end
+                    if Bag:FindFirstChild("RPBioColor") then
+                        Remotes.RPNameColor:FireServer("PickingRPBioColor", Bag.RPBioColor.Value)
+                        task.wait(0.3)
+                    end
+                end
+            end
+        end
+    end
+})
+
+
+
