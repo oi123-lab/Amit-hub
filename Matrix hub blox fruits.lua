@@ -3,7 +3,7 @@ local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/d
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 ----------------------------------------------------------------------------------------------------------------------------------------------
 local Window = Fluent:CreateWindow({
-    Title = "ReworkX Hub | Blox Fruits",
+    Title = "Matrix Hub : By Not Legitty Matrix Community| Blox Fruits",
     SubTitle = "V1",
     TabWidth = 160,
     Size = UDim2.fromOffset(500, 320),
