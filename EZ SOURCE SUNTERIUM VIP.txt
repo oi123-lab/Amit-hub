@@ -1,5 +1,3 @@
--- CRAKED BY NOT LEGITTY --
-
 local function obf_adjnqwidqwjhdpoq()
 	local function obf_wrapperfunc(obf_arg)
 		if obf_arg then
