@@ -7,8 +7,8 @@ loadstring(game:HttpGet("https://pastebin.com/raw/DTB6QZfY"))()
 
 
 local Window = Library:MakeWindow({
-    Title = "★꧁༒☠彡Matrix Hub༒꧂★ O Retorno v4.6: BROOKHAVEN RP 🏡",
-    SubTitle = "By : Matrix Community",
+    Title = "★☠Matrix Hub O Retorno v4.6☠★: BROOKHAVEN RP🏡",
+    SubTitle = "By : Matrix Community Rework",
     SaveFolder = "MATRIXHUB Folder"
 })
 
@@ -30,7 +30,7 @@ Tab1:AddParagraph({"Olá, " .. playerName .. "! ☄ Seja bem-vindo ao MATRIX HUB
 
 local Tab2 = Window:MakeTab({"Troll", "rbxassetid://10734934585"})
 
-local Section = Tab2:AddSection({"Troll v4 By Not legitty"})
+local Section = Tab2:AddSection({"Troll v5 By Not legitty"})
 
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
