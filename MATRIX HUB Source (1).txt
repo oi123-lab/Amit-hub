@@ -26,11 +26,11 @@ Tab1:AddParagraph({"⚙️ HUB ATUALIZADA COM NOVAS FUNCIONALIDADES INOVADORAS."
 Tab1:AddParagraph({"✅ Estabilidade Aprimorada: Menor chance de falhas e resposta mais rápida do sistema."})
 
 local playerName = game.Players.LocalPlayer.Name
-Tab1:AddParagraph({"Olá, " .. playerName .. "! ☄ Seja bem-vindo ao MATRIX HUB🎩. Aproveite com responsabilidade e Cuidado."})
+Tab1:AddParagraph({"Olá, " .. playerName .. "!✅ Seja bem-vindo ao SHNMAXHUB. Aproveite com responsabilidade e Cuidado."})
 
 local Tab2 = Window:MakeTab({"Troll", "rbxassetid://10734934585"})
 
-local Section = Tab2:AddSection({"Troll v4 By Not legitty"})
+local Section = Tab2:AddSection({"Aba Troll"})
 
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
@@ -248,7 +248,7 @@ Tab2:AddButton({
 	end
 })
 
-local Section = Tab2:AddSection({"<Combate Com Bola⚽️-"})
+local Section = Tab2:AddSection({"<Combate ball-"})
 
 -- Serviços
 local Players = game:GetService("Players")
@@ -360,7 +360,7 @@ end
 
 -- Botão que ativa o Fling com base no alvo selecionado
 Tab2:AddButton({
-	Name = "Fling Ball v3",
+	Name = "Fling Ball",
 	Callback = function()
 		if getgenv().Target then
 			setupBall()
@@ -576,7 +576,7 @@ SFBasePart(TRootPart)
 end
 
 Tab2:AddButton({
-    Name = "Fling - V18",
+    Name = "Fling Couch",
     Callback = function()
         if getgenv().Target then
             local TargetPlayer = GetPlayer(getgenv().Target)
